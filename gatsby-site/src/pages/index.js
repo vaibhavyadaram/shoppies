@@ -46,15 +46,15 @@ const IndexPage = () => {
 
   const addMovie = selectedMovie => {
     console.log(selectedMovie)
-    const previousNominees = localStorage.getItem("nominee")
-    localStorage.setItem("nominee", [selectedMovie.Title, previousNominees])
+    const disableButton = buttonRef.current
+    disableButton.setAttribute("disabled", "disabled")
   }
 
   const results = searchResults.map(movie => {
     return (
       <>
         <h1>{movie.Title}</h1>
-        <Button ref={buttonRef} onClick={() => addMovie(movie)}>
+        <Button ref={buttonRef} onClick={() => addMovie(movie.Title)}>
           select
         </Button>
       </>
