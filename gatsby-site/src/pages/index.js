@@ -51,15 +51,24 @@ const IndexPage = () => {
     getSearchResults().then(movies => {
       movies.Search.map(movie => {
         setSearchResults(searchResults => [...searchResults, movie.Title])
+        console.log("worked!")
       })
     })
+    console.log("worked x2!")
   }
 
   return (
     <>
       <Input type="text" id="movieTitle" placeholder="name" />
       <Button onClick={clickHandler}>search</Button>
-      {results}
+      {searchResults.map(movie => {
+        return (
+          <>
+            <h1>{movie}</h1>
+            <Button>select</Button>
+          </>
+        )
+      })}
     </>
   )
 }
