@@ -22,14 +22,12 @@ const Button = styled.button`
 
 const IndexPage = () => {
   const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
-  const [searchUrl, setUrl] = useState()
   const [searchResults, setSearchResults] = useState([])
 
   //fetch search results
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
-    setUrl(url + movieTitle)
-    const movieList = fetch(searchUrl)
+    const movieList = fetch(url + movieTitle)
       .then(success => success.json())
       .then(movies => {
         return movies
