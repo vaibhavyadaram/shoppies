@@ -48,13 +48,11 @@ const IndexPage = () => {
 
   const addMovie = selectedMovie => {
     nominations.push(selectedMovie)
-    //create state and push new nominations array whenever updated
-    console.log(nominations)
     setNomList(nominations => [...nominations, selectedMovie])
   }
 
   const results = searchResults.map(movie => {
-    if (nomList.includes(movie.Title)) {
+    if (nomList.includes(movie.Title) || nomList.length == 5) {
       return (
         <>
           <h1>{movie.Title}</h1>
@@ -80,8 +78,17 @@ const IndexPage = () => {
       )
   })
 
+  const removeNom = title => {
+    //remove title from nomList array
+  }
+
   const noms = nomList.map(movie => {
-    return <h4>{movie}</h4>
+    return (
+      <>
+        <h4>{movie}</h4>
+        <Button onClick={() => removeNom(movie)}>remove</Button>
+      </>
+    )
   })
 
   return (
