@@ -25,15 +25,10 @@ const IndexPage = () => {
   const [searchUrl, setUrl] = useState()
   const [searchResults, setSearchResults] = useState([])
 
-  //get search term from input
-  const clickHandler = () => {
-    const movieTitle = document.getElementById("movieTitle").value
-    setUrl(url + movieTitle)
-    displayResults()
-  }
-
   //fetch search results
   const getSearchResults = () => {
+    const movieTitle = document.getElementById("movieTitle").value
+    setUrl(url + movieTitle)
     const movieList = fetch(searchUrl)
       .then(success => success.json())
       .then(movies => {
@@ -42,13 +37,13 @@ const IndexPage = () => {
       .catch(err => {
         console.log(err)
       })
-
-    return movieList
+    setSearchResults([])
+    displayResults(movieList)
   }
 
   //display search results
-  const displayResults = () => {
-    getSearchResults().then(movies => {
+  const displayResults = movieList => {
+    movieList.then(movies => {
       movies.Search.map(movie => {
         setSearchResults(searchResults => [...searchResults, movie.Title])
         console.log("worked!")
@@ -60,7 +55,7 @@ const IndexPage = () => {
   return (
     <>
       <Input type="text" id="movieTitle" placeholder="name" />
-      <Button onClick={clickHandler}>search</Button>
+      <Button onClick={getSearchResults}>search</Button>
       {searchResults.map(movie => {
         return (
           <>
