@@ -24,7 +24,6 @@ const IndexPage = () => {
   const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
   const [searchResults, setSearchResults] = useState([])
 
-  //fetch search results
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
     const movieList = fetch(url + movieTitle)
@@ -39,15 +38,12 @@ const IndexPage = () => {
     displayResults(movieList)
   }
 
-  //display search results
   const displayResults = movieList => {
     movieList.then(movies => {
       movies.Search.map(movie => {
         setSearchResults(searchResults => [...searchResults, movie.Title])
-        console.log("worked!")
       })
     })
-    console.log("worked x2!")
   }
 
   return (
