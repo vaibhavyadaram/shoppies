@@ -23,7 +23,9 @@ const Button = styled.button`
 const IndexPage = () => {
   const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
   const [searchResults, setSearchResults] = useState([])
+  const [nomList, setNomList] = useState([])
   let buttonRef = useRef()
+  const nominations = []
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
@@ -45,20 +47,41 @@ const IndexPage = () => {
   }
 
   const addMovie = selectedMovie => {
-    console.log(selectedMovie)
-    const disableButton = buttonRef.current
-    disableButton.setAttribute("disabled", "disabled")
+    nominations.push(selectedMovie)
+    //create state and push new nominations array whenever updated
+    console.log(nominations)
+    setNomList(nominations => [...nominations, selectedMovie])
   }
 
   const results = searchResults.map(movie => {
-    return (
-      <>
-        <h1>{movie.Title}</h1>
-        <Button ref={buttonRef} onClick={() => addMovie(movie.Title)}>
-          select
-        </Button>
-      </>
-    )
+    if (nomList.includes(movie.Title)) {
+      return (
+        <>
+          <h1>{movie.Title}</h1>
+          <h6>{movie.Year}</h6>
+          <Button
+            ref={buttonRef}
+            disabled="disabled"
+            onClick={() => addMovie(movie.Title)}
+          >
+            select
+          </Button>
+        </>
+      )
+    } else
+      return (
+        <>
+          <h1>{movie.Title}</h1>
+          <h6>{movie.Year}</h6>
+          <Button ref={buttonRef} onClick={() => addMovie(movie.Title)}>
+            select
+          </Button>
+        </>
+      )
+  })
+
+  const noms = nomList.map(movie => {
+    return <h4>{movie}</h4>
   })
 
   return (
@@ -66,6 +89,7 @@ const IndexPage = () => {
       <Input type="text" id="movieTitle" placeholder="name" />
       <Button onClick={getSearchResults}>search</Button>
       {results}
+      {noms}
     </>
   )
 }
