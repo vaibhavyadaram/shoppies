@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import styled from "styled-components"
 
 const Input = styled.input`
@@ -23,6 +23,7 @@ const Button = styled.button`
 const IndexPage = () => {
   const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
   const [searchResults, setSearchResults] = useState([])
+  let buttonRef = useRef()
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
@@ -34,23 +35,28 @@ const IndexPage = () => {
       .catch(err => {
         console.log(err)
       })
-    setSearchResults([])
     displayResults(movieList)
   }
 
   const displayResults = movieList => {
     movieList.then(movies => {
-      movies.Search.map(movie => {
-        setSearchResults(searchResults => [...searchResults, movie.Title])
-      })
+      setSearchResults(movies.Search)
     })
+  }
+
+  const addMovie = selectedMovie => {
+    console.log(selectedMovie)
+    const previousNominees = localStorage.getItem("nominee")
+    localStorage.setItem("nominee", [selectedMovie.Title, previousNominees])
   }
 
   const results = searchResults.map(movie => {
     return (
       <>
-        <h1>{movie}</h1>
-        <Button>select</Button>
+        <h1>{movie.Title}</h1>
+        <Button ref={buttonRef} onClick={() => addMovie(movie)}>
+          select
+        </Button>
       </>
     )
   })
