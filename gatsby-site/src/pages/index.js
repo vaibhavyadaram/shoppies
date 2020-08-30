@@ -23,13 +23,16 @@ const Button = styled.button`
 const IndexPage = () => {
   const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
   const [searchUrl, setUrl] = useState()
+  const [searchResults, setSearchResults] = useState([])
 
+  //get search term from input
   const clickHandler = () => {
     const movieTitle = document.getElementById("movieTitle").value
     setUrl(url + movieTitle)
-    getSearchResults().then(movies => console.log(movies))
+    displayResults()
   }
 
+  //fetch search results
   const getSearchResults = () => {
     const movieList = fetch(searchUrl)
       .then(success => success.json())
@@ -43,11 +46,20 @@ const IndexPage = () => {
     return movieList
   }
 
+  //display search results
+  const displayResults = () => {
+    getSearchResults().then(movies => {
+      movies.Search.map(movie => {
+        setSearchResults(searchResults => [...searchResults, movie.Title])
+      })
+    })
+  }
+
   return (
     <>
       <Input type="text" id="movieTitle" placeholder="name" />
       <Button onClick={clickHandler}>search</Button>
-      {/* {searchList} */}
+      {results}
     </>
   )
 }
