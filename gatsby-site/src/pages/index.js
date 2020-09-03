@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import styled from "styled-components"
 
 const Input = styled.input`
@@ -51,10 +51,26 @@ const IndexPage = () => {
     setNomList(nominations => [...nominations, selectedMovie])
   }
 
+  const removeNom = title => {
+    if (nomList.includes(title)) {
+      const titleIndex = nomList.indexOf(title)
+      const newList = nomList
+      console.log("before splice:" + newList)
+      newList.splice(titleIndex, 1)
+      console.log("after splice:" + newList)
+      setNomList([...newList])
+      console.log("nomList splice:" + nomList)
+    }
+  }
+
+  useEffect(() => {
+    console.log("useEffect: " + nomList)
+  }, [nomList])
+
   const results = searchResults.map(movie => {
-    if (nomList.includes(movie.Title) || nomList.length == 5) {
+    if (nomList.includes(movie.Title) || nomList.length === 5) {
       return (
-        <>
+        <div key={movie.Title}>
           <h1>{movie.Title}</h1>
           <h6>{movie.Year}</h6>
           <Button
@@ -64,39 +80,42 @@ const IndexPage = () => {
           >
             select
           </Button>
-        </>
+        </div>
       )
     } else
       return (
-        <>
+        <div key={movie.Title}>
           <h1>{movie.Title}</h1>
           <h6>{movie.Year}</h6>
           <Button ref={buttonRef} onClick={() => addMovie(movie.Title)}>
             select
           </Button>
-        </>
+        </div>
       )
   })
 
-  const removeNom = title => {
-    //remove title from nomList array
-  }
+  const noms = movieList => {
+    console.log("working!!")
 
-  const noms = nomList.map(movie => {
     return (
       <>
-        <h4>{movie}</h4>
-        <Button onClick={() => removeNom(movie)}>remove</Button>
+        {movieList.map(movie => (
+          <div key={movie}>
+            <h4>{movie}</h4>
+            <Button onClick={() => removeNom(movie)}>remove</Button>
+          </div>
+        ))}
       </>
     )
-  })
+  }
 
   return (
     <>
       <Input type="text" id="movieTitle" placeholder="name" />
       <Button onClick={getSearchResults}>search</Button>
+      <div></div>
       {results}
-      {noms}
+      {noms(nomList)}
     </>
   )
 }
