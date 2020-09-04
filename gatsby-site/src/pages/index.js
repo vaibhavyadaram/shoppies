@@ -1,12 +1,29 @@
 import React, { useState, useRef, useEffect } from "react"
 import styled from "styled-components"
 
+const SearchBarWrapper = styled.div`
+  width: 100%;
+  display: flex;
+
+  justify-content: center;
+`
+
 const SearchBar = styled.div`
   display: flex;
   flex-direction: row;
   width: 80%;
   height: 25px;
   margin: 20px 0 0 0;
+`
+
+const SearchSubtitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 25px;
+  margin: 20px 0 20px 40px;
+  font-family: Inter-SemiBold;
+  color: white;
 `
 
 const Input = styled.input`
@@ -36,7 +53,7 @@ const Button = styled.button`
 const PageContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 10vh 45vh 45vh;
+  grid-template-rows: 10vh 50vh 40vh;
   width: 100%;
   justify-items: center;
 `
@@ -52,13 +69,12 @@ const Title = styled.div`
 const SearchContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 20% 80%;
+  grid-template-rows: 15% 15% 70%;
   width: 90%;
   height: 100%;
   background-color: #483faf;
-  justify-items: center;
   align-self: center;
-  border-radius: 25px;
+  border-radius: 20px;
 `
 
 const ResultsContainer = styled.div`
@@ -67,8 +83,9 @@ const ResultsContainer = styled.div`
   height: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
-  justify-content: center;
-  align-items: center;
+  padding: 0 40px 0 40px;
+  /* justify-content: center;
+  align-items: center; */
   &::-webkit-scrollbar {
     display: none;
   }
@@ -76,28 +93,27 @@ const ResultsContainer = styled.div`
 
 const MovieCardContainer = styled.div`
   display: grid;
-  height: 100%;
-  grid-template-rows: 60% 20% 10% 10%;
+  height: 90%;
+  grid-template-rows: 60% 15% 10% 15%;
   grid-gap: 0;
-  margin: 0 20px 20px 0;
+  margin: 0 35px 0 0;
   justify-content: center;
   align-items: center;
+  justify-items: center;
 `
 
 const MoviePoster = styled.img`
   height: 100%;
   width: auto;
-  margin: 0;
   align-self: center;
 `
 
 const MovieTitle = styled.p`
-  width: 100%;
+  width: 170px;
   font-family: Inter-SemiBold;
   color: white;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
-  margin: 0;
   align-self: center;
 `
 
@@ -106,18 +122,42 @@ const MovieYear = styled.p`
   color: white;
   font-size: 12px;
   text-align: center;
-  margin: 0;
   align-self: center;
+`
+
+const Select = styled.button`
+  width: 120px;
+  height: 100%;
+  background-color: #d88e00;
+  color: white;
+  font-family: Inter-SemiBold;
+  font-size: 12px;
+  -webkit-appearance: none;
+  box-sizing: content-box;
+  border: none;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: #f5c972;
+    transition: 0.2s;
+  }
+
+  &:disabled {
+    background-color: #6b6b6b;
+    transition: 0.2s;
+  }
 `
 
 const IndexPage = () => {
   const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
   const [searchResults, setSearchResults] = useState([])
+  const [searchTerm, setSearchTerm] = useState()
   const [nomList, setNomList] = useState([])
   const nominations = []
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
+    setSearchTerm(movieTitle)
     const movieList = fetch(url + movieTitle)
       .then(success => success.json())
       .then(movies => {
@@ -152,10 +192,6 @@ const IndexPage = () => {
     }
   }
 
-  useEffect(() => {
-    console.log("useEffect: " + nomList)
-  }, [nomList])
-
   const results = searchResults.map(movie => {
     if (nomList.includes(movie.Title) || nomList.length === 5) {
       return (
@@ -163,7 +199,7 @@ const IndexPage = () => {
           <MoviePoster src={movie.Poster} />
           <MovieTitle>{movie.Title}</MovieTitle>
           <MovieYear>{movie.Year}</MovieYear>
-          <Button disabled="disabled">select</Button>
+          <Select disabled="disabled">Nominate</Select>
         </MovieCardContainer>
       )
     } else
@@ -172,7 +208,7 @@ const IndexPage = () => {
           <MoviePoster src={movie.Poster} />
           <MovieTitle>{movie.Title}</MovieTitle>
           <MovieYear>{movie.Year}</MovieYear>
-          <Button onClick={() => addMovie(movie.Title)}>select</Button>
+          <Select onClick={() => addMovie(movie.Title)}>Nominate</Select>
         </MovieCardContainer>
       )
   })
@@ -209,10 +245,17 @@ const IndexPage = () => {
       <PageContainer>
         <Title>The Shoppies</Title>
         <SearchContainer>
-          <SearchBar>
-            <Input type="text" id="movieTitle" placeholder="Django Unchained" />
-            <Button onClick={getSearchResults}>Search</Button>
-          </SearchBar>
+          <SearchBarWrapper>
+            <SearchBar>
+              <Input
+                type="text"
+                id="movieTitle"
+                placeholder="Django Unchained"
+              />
+              <Button onClick={getSearchResults}>Search</Button>
+            </SearchBar>
+          </SearchBarWrapper>
+          <SearchSubtitle>Search results for: "{searchTerm}" </SearchSubtitle>
           <ResultsContainer>{results}</ResultsContainer>
         </SearchContainer>
       </PageContainer>
