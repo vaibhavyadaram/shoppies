@@ -1,30 +1,114 @@
 import React, { useState, useRef, useEffect } from "react"
 import styled from "styled-components"
 
+const SearchBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  height: 25px;
+  margin: 20px 0 0 0;
+`
+
 const Input = styled.input`
-  font-family: Arial;
-  font-weight: 700;
-  font-size: 20px;
-  margin: 0 0 20px 0;
-  text-align: center;
+  -webkit-appearance: none;
+  font-family: Inter-Regular;
+  font-size: 14px;
+  text-align: left;
+  width: 90%;
+  height: 100%;
+  border-radius: 10px 0px 0px 10px;
+  border: none;
+  padding-left: 10px;
 `
 
 const Button = styled.button`
-  font-family: Arial;
-  font-weight: 700;
-  font-size: 20px;
-  margin: 0 0 20px 0;
+  -webkit-appearance: none;
+  box-sizing: content-box;
+  font-family: Inter-Regular;
+  font-size: 14px;
   text-align: center;
-  height: 50px;
-  width: 150px;
   border: none;
+  height: 25px;
+  width: 10%;
+  border-radius: 0px 10px 10px 0px;
+`
+
+const PageContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10vh 45vh 45vh;
+  width: 100%;
+  justify-items: center;
+`
+
+const Title = styled.div`
+  font-size: 30px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: Inter-Bold;
+`
+
+const SearchContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 90%;
+  height: 100%;
+  background-color: #483faf;
+  justify-items: center;
+  align-self: center;
+  border-radius: 25px;
+`
+
+const ResultsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 0 0 0 100px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+
+const MovieCardContainer = styled.div`
+  display: grid;
+  grid-template-rows: 60% 20% 10% 10%;
+  grid-gap: 0;
+  width: 400px;
+  margin: 0 50px 0 0;
+  justify-content: center;
+`
+
+const MoviePoster = styled.img`
+  height: 100%;
+  width: auto;
+  margin: 0;
+`
+
+const MovieTitle = styled.p`
+  width: 100%;
+  font-family: Inter-SemiBold;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+`
+
+const MovieYear = styled.p`
+  font-family: Inter-Regular;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  margin: 0;
 `
 
 const IndexPage = () => {
   const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
   const [searchResults, setSearchResults] = useState([])
   const [nomList, setNomList] = useState([])
-  let buttonRef = useRef()
   const nominations = []
 
   const getSearchResults = () => {
@@ -70,27 +154,21 @@ const IndexPage = () => {
   const results = searchResults.map(movie => {
     if (nomList.includes(movie.Title) || nomList.length === 5) {
       return (
-        <div key={movie.Title}>
-          <h1>{movie.Title}</h1>
-          <h6>{movie.Year}</h6>
-          <Button
-            ref={buttonRef}
-            disabled="disabled"
-            onClick={() => addMovie(movie.Title)}
-          >
-            select
-          </Button>
-        </div>
+        <MovieCardContainer key={movie.Title}>
+          <MoviePoster src={movie.Poster} />
+          <MovieTitle>{movie.Title}</MovieTitle>
+          <MovieYear>{movie.Year}</MovieYear>
+          <Button disabled="disabled">select</Button>
+        </MovieCardContainer>
       )
     } else
       return (
-        <div key={movie.Title}>
-          <h1>{movie.Title}</h1>
-          <h6>{movie.Year}</h6>
-          <Button ref={buttonRef} onClick={() => addMovie(movie.Title)}>
-            select
-          </Button>
-        </div>
+        <MovieCardContainer key={movie.Title}>
+          <MoviePoster src={movie.Poster} />
+          <MovieTitle>{movie.Title}</MovieTitle>
+          <MovieYear>{movie.Year}</MovieYear>
+          <Button onClick={() => addMovie(movie.Title)}>select</Button>
+        </MovieCardContainer>
       )
   })
 
@@ -109,13 +187,37 @@ const IndexPage = () => {
     )
   }
 
+  const link =
+    "https://twitter.com/intent/tweet?text=My%20Shoppies%20picks%20are:%20" +
+    nomList[0] +
+    "%20" +
+    nomList[1] +
+    "%20" +
+    nomList[2] +
+    "%20" +
+    nomList[3] +
+    "%20" +
+    nomList[4]
+
   return (
     <>
-      <Input type="text" id="movieTitle" placeholder="name" />
-      <Button onClick={getSearchResults}>search</Button>
+      <PageContainer>
+        <Title>The Shoppies</Title>
+        <SearchContainer>
+          <SearchBar>
+            <Input type="text" id="movieTitle" placeholder="Django Unchained" />
+            <Button onClick={getSearchResults}>Search</Button>
+          </SearchBar>
+          <ResultsContainer>{results}</ResultsContainer>
+        </SearchContainer>
+      </PageContainer>
+
       <div></div>
-      {results}
+
       {noms(nomList)}
+      {/* <a class="twitter-share-button" href={link} data-size="large">
+        Tweet
+      </a> */}
     </>
   )
 }
