@@ -52,6 +52,7 @@ const Title = styled.div`
 const SearchContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
+  grid-template-rows: 20% 80%;
   width: 90%;
   height: 100%;
   background-color: #483faf;
@@ -63,11 +64,11 @@ const SearchContainer = styled.div`
 const ResultsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  width: 100%;
-  padding: 0 0 0 100px;
+  height: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
-
+  justify-content: center;
+  align-items: center;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -75,17 +76,19 @@ const ResultsContainer = styled.div`
 
 const MovieCardContainer = styled.div`
   display: grid;
+  height: 100%;
   grid-template-rows: 60% 20% 10% 10%;
   grid-gap: 0;
-  width: 400px;
-  margin: 0 50px 0 0;
+  margin: 0 20px 20px 0;
   justify-content: center;
+  align-items: center;
 `
 
 const MoviePoster = styled.img`
   height: 100%;
   width: auto;
   margin: 0;
+  align-self: center;
 `
 
 const MovieTitle = styled.p`
@@ -95,6 +98,7 @@ const MovieTitle = styled.p`
   font-size: 14px;
   text-align: center;
   margin: 0;
+  align-self: center;
 `
 
 const MovieYear = styled.p`
@@ -103,6 +107,7 @@ const MovieYear = styled.p`
   font-size: 12px;
   text-align: center;
   margin: 0;
+  align-self: center;
 `
 
 const IndexPage = () => {
