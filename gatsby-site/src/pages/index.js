@@ -161,13 +161,16 @@ const IndexPage = () => {
   const url =
     "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s="
   const [searchResults, setSearchResults] = useState([])
-  const [searchTerm, setSearchTerm] = useState()
+  const [searchTerm, setSearchTerm] = useState(
+    "Search for your favourite movies to nominate!"
+  )
   const [nomList, setNomList] = useState([])
   const nominations = []
+  const [emptySearch, setEmptySearch] = useState()
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
-    setSearchTerm(movieTitle)
+    setSearchTerm("Search results for: " + movieTitle)
     const movieList = fetch(url + movieTitle)
       .then(success => success.json())
       .then(movies => {
@@ -182,7 +185,13 @@ const IndexPage = () => {
   const displayResults = movieList => {
     movieList.then(movies => {
       if (movies.Search != undefined) {
+        setEmptySearch(false)
         setSearchResults(movies.Search)
+      } else {
+        setSearchTerm(
+          "Hmmm, I couldn't find anything with that title! Try again!"
+        )
+        setEmptySearch(true)
       }
     })
   }
@@ -210,6 +219,9 @@ const IndexPage = () => {
   }
 
   const results = searchResults.map(movie => {
+    if (emptySearch) {
+      setSearchResults([])
+    }
     if (nomList.includes(movie) || nomList.length === 5) {
       return (
         <MovieCardContainer key={movie.imdbID}>
@@ -270,17 +282,12 @@ const IndexPage = () => {
               <Button onClick={getSearchResults}>Search</Button>
             </SearchBar>
           </SearchBarWrapper>
-          <SearchSubtitle>Search results for: "{searchTerm}" </SearchSubtitle>
+          <SearchSubtitle>{searchTerm} </SearchSubtitle>
           <ResultsContainer>{results}</ResultsContainer>
         </SearchContainer>
       </PageContainer>
-
       <div></div>
-
       {noms(nomList)}
-      {/* <a class="twitter-share-button" href={link} data-size="large">
-        Tweet
-      </a> */}
     </>
   )
 }
