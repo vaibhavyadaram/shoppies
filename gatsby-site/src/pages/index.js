@@ -149,7 +149,8 @@ const Select = styled.button`
 `
 
 const IndexPage = () => {
-  const url = "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&s="
+  const url =
+    "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s="
   const [searchResults, setSearchResults] = useState([])
   const [searchTerm, setSearchTerm] = useState()
   const [nomList, setNomList] = useState([])
@@ -190,7 +191,7 @@ const IndexPage = () => {
   }
 
   const results = searchResults.map(movie => {
-    if (nomList.includes(movie.Title) || nomList.length === 5) {
+    if (nomList.includes(movie) || nomList.length === 5) {
       return (
         <MovieCardContainer key={movie.imdbID}>
           <MoviePoster src={movie.Poster} />
