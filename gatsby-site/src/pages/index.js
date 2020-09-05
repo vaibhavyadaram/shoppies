@@ -251,7 +251,9 @@ const IndexPage = () => {
     "Search for your favourite movies to nominate!"
   )
   const [nomList, setNomList] = useState([])
+  const [nomIDs, setNomIDs] = useState([])
   const nominations = []
+  const idList = []
   const [emptySearch, setEmptySearch] = useState()
   const [disableTweet, setDisableTweet] = useState("disabled")
 
@@ -286,6 +288,7 @@ const IndexPage = () => {
   const addMovie = selectedMovie => {
     nominations.push(selectedMovie.Title)
     setNomList(nominations => [...nominations, selectedMovie])
+    setNomIDs([...nomIDs, selectedMovie.imdbID])
   }
 
   const removeNom = title => {
@@ -294,12 +297,18 @@ const IndexPage = () => {
       const newList = nomList
       newList.splice(titleIndex, 1)
       setNomList([...newList])
+
+      const idIndex = nomIDs.indexOf(title.imdbID)
+      const newIDList = nomIDs
+      newIDList.splice(idIndex, 1)
+      setNomIDs([...newIDList])
     }
   }
 
   const clearAllHandler = () => {
     const emptyList = []
     setNomList([...emptyList])
+    setNomIDs([...emptyList])
   }
 
   const isMoviePosterValid = poster => {
@@ -314,7 +323,7 @@ const IndexPage = () => {
     if (emptySearch) {
       setSearchResults([])
     }
-    if (nomList.includes(movie) || nomList.length === 5) {
+    if (nomIDs.includes(movie.imdbID) || nomList.length === 5) {
       return (
         <MovieCardContainer key={movie.imdbID}>
           <MoviePoster src={isMoviePosterValid(movie.Poster)} />
