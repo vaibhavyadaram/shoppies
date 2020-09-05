@@ -176,7 +176,7 @@ const IndexPage = () => {
   }
 
   const addMovie = selectedMovie => {
-    nominations.push(selectedMovie)
+    nominations.push(selectedMovie.Title)
     setNomList(nominations => [...nominations, selectedMovie])
   }
 
@@ -184,18 +184,15 @@ const IndexPage = () => {
     if (nomList.includes(title)) {
       const titleIndex = nomList.indexOf(title)
       const newList = nomList
-      console.log("before splice:" + newList)
       newList.splice(titleIndex, 1)
-      console.log("after splice:" + newList)
       setNomList([...newList])
-      console.log("nomList splice:" + nomList)
     }
   }
 
   const results = searchResults.map(movie => {
     if (nomList.includes(movie.Title) || nomList.length === 5) {
       return (
-        <MovieCardContainer key={movie.Title}>
+        <MovieCardContainer key={movie.imdbID}>
           <MoviePoster src={movie.Poster} />
           <MovieTitle>{movie.Title}</MovieTitle>
           <MovieYear>{movie.Year}</MovieYear>
@@ -204,11 +201,11 @@ const IndexPage = () => {
       )
     } else
       return (
-        <MovieCardContainer key={movie.Title}>
+        <MovieCardContainer key={movie.imdbID}>
           <MoviePoster src={movie.Poster} />
           <MovieTitle>{movie.Title}</MovieTitle>
           <MovieYear>{movie.Year}</MovieYear>
-          <Select onClick={() => addMovie(movie.Title)}>Nominate</Select>
+          <Select onClick={() => addMovie(movie)}>Nominate</Select>
         </MovieCardContainer>
       )
   })
@@ -219,8 +216,8 @@ const IndexPage = () => {
     return (
       <>
         {movieList.map(movie => (
-          <div key={movie}>
-            <h4>{movie}</h4>
+          <div key={movie.imdbID}>
+            <h4>{movie.Title}</h4>
             <Button onClick={() => removeNom(movie)}>remove</Button>
           </div>
         ))}
