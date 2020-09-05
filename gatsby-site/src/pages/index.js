@@ -1,5 +1,33 @@
 import React, { useState, useRef, useEffect } from "react"
 import styled from "styled-components"
+import NoImage from "../images/noimage.png"
+
+const PageContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10vh 50vh 40vh;
+  width: 100%;
+  justify-items: center;
+`
+
+const Title = styled.div`
+  font-size: 30px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  font-family: Inter-Bold;
+`
+
+const SearchContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 15% 15% 70%;
+  width: 90%;
+  height: 100%;
+  background-color: #483faf;
+  align-self: center;
+  border-radius: 20px;
+`
 
 const SearchBarWrapper = styled.div`
   width: 100%;
@@ -36,6 +64,7 @@ const Input = styled.input`
   border-radius: 10px 0px 0px 10px;
   border: none;
   padding-left: 10px;
+  outline: none;
 `
 
 const Button = styled.button`
@@ -48,33 +77,15 @@ const Button = styled.button`
   height: 25px;
   width: 10%;
   border-radius: 0px 10px 10px 0px;
-`
+  outline: none;
+  transition: 0.2s;
+  background-color: #d88e00;
+  color: white;
 
-const PageContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 10vh 50vh 40vh;
-  width: 100%;
-  justify-items: center;
-`
-
-const Title = styled.div`
-  font-size: 30px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  font-family: Inter-Bold;
-`
-
-const SearchContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 15% 15% 70%;
-  width: 90%;
-  height: 100%;
-  background-color: #483faf;
-  align-self: center;
-  border-radius: 20px;
+  &:hover {
+    transition: 0.2s;
+    background-color: #f5c972;
+  }
 `
 
 const ResultsContainer = styled.div`
@@ -84,8 +95,6 @@ const ResultsContainer = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
   padding: 0 40px 0 40px;
-  /* justify-content: center;
-  align-items: center; */
   &::-webkit-scrollbar {
     display: none;
   }
@@ -172,7 +181,9 @@ const IndexPage = () => {
 
   const displayResults = movieList => {
     movieList.then(movies => {
-      setSearchResults(movies.Search)
+      if (movies.Search != undefined) {
+        setSearchResults(movies.Search)
+      }
     })
   }
 
@@ -190,11 +201,19 @@ const IndexPage = () => {
     }
   }
 
+  const isMoviePosterValid = poster => {
+    if (poster == "N/A") {
+      return NoImage
+    } else {
+      return poster
+    }
+  }
+
   const results = searchResults.map(movie => {
     if (nomList.includes(movie) || nomList.length === 5) {
       return (
         <MovieCardContainer key={movie.imdbID}>
-          <MoviePoster src={movie.Poster} />
+          <MoviePoster src={isMoviePosterValid(movie.Poster)} />
           <MovieTitle>{movie.Title}</MovieTitle>
           <MovieYear>{movie.Year}</MovieYear>
           <Select disabled="disabled">Nominate</Select>
@@ -203,7 +222,7 @@ const IndexPage = () => {
     } else
       return (
         <MovieCardContainer key={movie.imdbID}>
-          <MoviePoster src={movie.Poster} />
+          <MoviePoster src={isMoviePosterValid(movie.Poster)} />
           <MovieTitle>{movie.Title}</MovieTitle>
           <MovieYear>{movie.Year}</MovieYear>
           <Select onClick={() => addMovie(movie)}>Nominate</Select>
@@ -212,8 +231,6 @@ const IndexPage = () => {
   })
 
   const noms = movieList => {
-    console.log("working!!")
-
     return (
       <>
         {movieList.map(movie => (
@@ -226,17 +243,17 @@ const IndexPage = () => {
     )
   }
 
-  const link =
-    "https://twitter.com/intent/tweet?text=My%20Shoppies%20picks%20are:%20" +
-    nomList[0] +
-    "%20" +
-    nomList[1] +
-    "%20" +
-    nomList[2] +
-    "%20" +
-    nomList[3] +
-    "%20" +
-    nomList[4]
+  // const link =
+  //   "https://twitter.com/intent/tweet?text=My%20Shoppies%20picks%20are:%20" +
+  //   nomList[0] +
+  //   "%20" +
+  //   nomList[1] +
+  //   "%20" +
+  //   nomList[2] +
+  //   "%20" +
+  //   nomList[3] +
+  //   "%20" +
+  //   nomList[4]
 
   return (
     <>
