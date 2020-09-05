@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 import NoImage from "../images/noimage.png"
 
 const PageContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 10vh 50vh 40vh;
+  grid-template-rows: 60vh 30vh;
+  grid-gap: 20px;
   width: 100%;
+  height: 100vh;
   justify-items: center;
 `
 
@@ -52,6 +54,7 @@ const SearchSubtitle = styled.div`
   margin: 20px 0 20px 40px;
   font-family: Inter-SemiBold;
   color: white;
+  opacity: 0.5;
 `
 
 const Input = styled.input`
@@ -103,9 +106,9 @@ const ResultsContainer = styled.div`
 const MovieCardContainer = styled.div`
   display: grid;
   height: 90%;
-  grid-template-rows: 60% 15% 10% 15%;
+  grid-template-rows: 60% 25% 15%;
   grid-gap: 0;
-  margin: 0 35px 0 0;
+  margin-right: ${props => `${props.margin}`};
   justify-content: center;
   align-items: center;
   justify-items: center;
@@ -120,7 +123,7 @@ const MoviePoster = styled.img`
 const MovieTitle = styled.p`
   width: 170px;
   font-family: Inter-SemiBold;
-  color: white;
+  color: ${props => `${props.color}`};
   font-size: 12px;
   text-align: center;
   align-self: center;
@@ -128,15 +131,14 @@ const MovieTitle = styled.p`
 
 const MovieYear = styled.p`
   font-family: Inter-Regular;
-  color: white;
+  color: ${props => `${props.color}`};
   font-size: 12px;
   text-align: center;
   align-self: center;
 `
 
 const Select = styled.button`
-  width: 120px;
-  height: 100%;
+  padding: 10px 15px 10px 15px;
   background-color: #d88e00;
   color: white;
   font-family: Inter-SemiBold;
@@ -145,6 +147,7 @@ const Select = styled.button`
   box-sizing: content-box;
   border: none;
   transition: 0.2s;
+  border-radius: 3px;
 
   &:hover {
     background-color: #f5c972;
@@ -153,6 +156,89 @@ const Select = styled.button`
 
   &:disabled {
     background-color: #6b6b6b;
+    transition: 0.2s;
+  }
+`
+
+const NominationPanel = styled.div`
+  display: grid;
+  grid-template-columns: 15% 85%;
+  width: 90%;
+  height: 100%;
+  border: 5px dotted #483faf;
+  background-color: white;
+  align-self: center;
+  border-radius: 20px;
+  padding-top: 20px;
+`
+
+const NomsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  padding: 0 0 0 0;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
+
+const Remove = styled.button`
+  font-family: Inter-Regular;
+  font-size: 12px;
+  color: #606060;
+  border: none;
+  background: none;
+`
+
+const NomHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const NomHeader = styled.p`
+  font-family: Inter-Bold;
+  font-size: 18px;
+  color: #606060;
+  margin: 0 0 0 20px;
+`
+
+const TweetButton = styled.a`
+  width: 80%;
+  margin: 20px 0 0 20px;
+  background-color: #00acee;
+  color: white;
+  border: none;
+  font-family: Inter-SemiBold;
+  font-size: 14px;
+  transition: 0.2s;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 0 10px 0;
+  border-radius: 3px;
+  &:hover {
+    opacity: 0.5;
+    transition: 0.2s;
+  }
+`
+
+const ClearAll = styled.button`
+  width: 80%;
+  margin: 20px 0 0 20px;
+  background-color: #606060;
+  color: white;
+  border: none;
+  font-family: Inter-SemiBold;
+  font-size: 14px;
+  transition: 0.2s;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 0 10px 0;
+  border-radius: 3px;
+  &:hover {
+    opacity: 0.5;
     transition: 0.2s;
   }
 `
@@ -167,6 +253,7 @@ const IndexPage = () => {
   const [nomList, setNomList] = useState([])
   const nominations = []
   const [emptySearch, setEmptySearch] = useState()
+  const [disableTweet, setDisableTweet] = useState("disabled")
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
@@ -210,6 +297,11 @@ const IndexPage = () => {
     }
   }
 
+  const clearAllHandler = () => {
+    const emptyList = []
+    setNomList([...emptyList])
+  }
+
   const isMoviePosterValid = poster => {
     if (poster == "N/A") {
       return NoImage
@@ -226,8 +318,9 @@ const IndexPage = () => {
       return (
         <MovieCardContainer key={movie.imdbID}>
           <MoviePoster src={isMoviePosterValid(movie.Poster)} />
-          <MovieTitle>{movie.Title}</MovieTitle>
-          <MovieYear>{movie.Year}</MovieYear>
+          <MovieTitle color="white">
+            {movie.Title} ({movie.Year})
+          </MovieTitle>
           <Select disabled="disabled">Nominate</Select>
         </MovieCardContainer>
       )
@@ -235,8 +328,9 @@ const IndexPage = () => {
       return (
         <MovieCardContainer key={movie.imdbID}>
           <MoviePoster src={isMoviePosterValid(movie.Poster)} />
-          <MovieTitle>{movie.Title}</MovieTitle>
-          <MovieYear>{movie.Year}</MovieYear>
+          <MovieTitle color="white">
+            {movie.Title} ({movie.Year})
+          </MovieTitle>
           <Select onClick={() => addMovie(movie)}>Nominate</Select>
         </MovieCardContainer>
       )
@@ -246,38 +340,28 @@ const IndexPage = () => {
     return (
       <>
         {movieList.map(movie => (
-          <div key={movie.imdbID}>
-            <h4>{movie.Title}</h4>
-            <Button onClick={() => removeNom(movie)}>remove</Button>
-          </div>
+          <MovieCardContainer key={movie.imdbID}>
+            <MoviePoster src={isMoviePosterValid(movie.Poster)} />
+            <MovieTitle color="#606060">
+              {movie.Title} ({movie.Year})
+            </MovieTitle>
+            <Remove onClick={() => removeNom(movie)}>Remove</Remove>
+          </MovieCardContainer>
         ))}
       </>
     )
   }
 
-  // const link =
-  //   "https://twitter.com/intent/tweet?text=My%20Shoppies%20picks%20are:%20" +
-  //   nomList[0] +
-  //   "%20" +
-  //   nomList[1] +
-  //   "%20" +
-  //   nomList[2] +
-  //   "%20" +
-  //   nomList[3] +
-  //   "%20" +
-  //   nomList[4]
-
   return (
     <>
       <PageContainer>
-        <Title>The Shoppies</Title>
         <SearchContainer>
           <SearchBarWrapper>
             <SearchBar>
               <Input
                 type="text"
                 id="movieTitle"
-                placeholder="Django Unchained"
+                placeholder="Search for a movie"
               />
               <Button onClick={getSearchResults}>Search</Button>
             </SearchBar>
@@ -285,9 +369,14 @@ const IndexPage = () => {
           <SearchSubtitle>{searchTerm} </SearchSubtitle>
           <ResultsContainer>{results}</ResultsContainer>
         </SearchContainer>
+        <NominationPanel>
+          <NomHeaderContainer>
+            <NomHeader>Your Nominations</NomHeader>
+            <ClearAll onClick={clearAllHandler}>Clear All</ClearAll>
+          </NomHeaderContainer>
+          <NomsContainer>{noms(nomList)}</NomsContainer>
+        </NominationPanel>
       </PageContainer>
-      <div></div>
-      {noms(nomList)}
     </>
   )
 }
