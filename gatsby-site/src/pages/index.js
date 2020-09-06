@@ -3,6 +3,16 @@ import styled from "styled-components"
 import NoImage from "../images/noimage.png"
 import { gsap } from "gsap"
 
+const Title = styled.p`
+  position: absolute;
+  transform-origin: 0 0;
+  transform: rotate(90deg);
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+
 const PageContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -11,6 +21,7 @@ const PageContainer = styled.div`
   width: 100%;
   height: 100vh;
   justify-items: center;
+  padding-top: 20px;
 `
 
 const SearchContainer = styled.div`
@@ -153,7 +164,7 @@ const NominationPanel = styled.div`
   grid-template-columns: 15% 85%;
   width: 90%;
   height: 100%;
-  border: 5px dotted #483faf;
+  border: 5px dashed #483faf;
   background-color: white;
   align-self: center;
   border-radius: 20px;
@@ -223,7 +234,7 @@ const Banner = styled.div`
   position: absolute;
   z-index: 10;
   background-color: #483faf;
-  border-radius: 20px;
+  border-radius: 15px;
   -webkit-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
   -moz-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
   box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
@@ -396,7 +407,7 @@ const IndexPage = () => {
       })
       gsap.to("#SearchContainer", {
         backgroundColor: "white",
-        border: "5px dotted #483faf",
+        border: "5px dashed #483faf",
         duration: 0.5,
       })
       gsap.to(".searchContent", {
@@ -411,7 +422,7 @@ const IndexPage = () => {
       setBannerDisplay("none")
       gsap.to("#NominationPanel", {
         backgroundColor: "white",
-        border: "5px dotted #483faf",
+        border: "5px dashed #483faf",
         duration: 0.5,
       })
       gsap.to(".NominationCard", {
@@ -436,6 +447,7 @@ const IndexPage = () => {
 
   return (
     <>
+      {/* <Title>The Shoppies</Title> */}
       <Banner display={bannerDisplay}>
         <BannerContentContainer>
           <BannerContent>You've nominated 5 movies! &#127881;</BannerContent>
