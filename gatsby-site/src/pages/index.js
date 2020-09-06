@@ -227,10 +227,11 @@ const Banner = styled.div`
   width: 500px;
   height: 100px;
   background-color: red;
-  display: ${props => `${props.display}`};
   left: 0;
   right: 0;
-  margin: 50px auto 0 auto;
+  margin: 0px auto 0 auto;
+  opacity: 0;
+  display: none;
   position: absolute;
   z-index: 10;
   background-color: #483faf;
@@ -395,7 +396,12 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (nomList.length > 4) {
-      setBannerDisplay("block")
+      gsap.to("#Banner", {
+        display: "block",
+        marginTop: "50px",
+        autoAlpha: 1,
+        duration: 0.5,
+      })
       gsap.to("#NominationPanel", {
         backgroundColor: "#483faf",
         border: "none",
@@ -419,7 +425,6 @@ const IndexPage = () => {
         duration: 0.5,
       })
     } else {
-      setBannerDisplay("none")
       gsap.to("#NominationPanel", {
         backgroundColor: "white",
         border: "5px dashed #483faf",
@@ -442,16 +447,31 @@ const IndexPage = () => {
         backgroundColor: "white",
         duration: 0.5,
       })
+      gsap.to("#Banner", {
+        display: "none",
+        marginTop: "0px",
+        autoAlpha: 0,
+        duration: 0.5,
+      })
     }
   }, [nomList])
+
+  const CloseBanner = () => {
+    gsap.to("#Banner", {
+      display: "none",
+      marginTop: "0px",
+      autoAlpha: 0,
+      duration: 0.5,
+    })
+  }
 
   return (
     <>
       {/* <Title>The Shoppies</Title> */}
-      <Banner display={bannerDisplay}>
+      <Banner id="Banner">
         <BannerContentContainer>
           <BannerContent>You've nominated 5 movies! &#127881;</BannerContent>
-          <Close onClick={() => setBannerDisplay("none")}>Close</Close>
+          <Close onClick={CloseBanner}>Close</Close>
         </BannerContentContainer>
       </Banner>
       <PageContainer>
