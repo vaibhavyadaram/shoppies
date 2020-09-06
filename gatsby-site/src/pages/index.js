@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import NoImage from "../images/noimage.png"
+import { gsap } from "gsap"
 
 const PageContainer = styled.div`
   display: grid;
@@ -12,14 +13,6 @@ const PageContainer = styled.div`
   justify-items: center;
 `
 
-const Title = styled.div`
-  font-size: 30px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  font-family: Inter-Bold;
-`
-
 const SearchContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -29,6 +22,7 @@ const SearchContainer = styled.div`
   background-color: #483faf;
   align-self: center;
   border-radius: 20px;
+  border: none;
 `
 
 const SearchBarWrapper = styled.div`
@@ -47,13 +41,13 @@ const SearchBar = styled.div`
 `
 
 const SearchSubtitle = styled.div`
+  color: white;
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 25px;
   margin: 20px 0 20px 40px;
   font-family: Inter-SemiBold;
-  color: white;
   opacity: 0.5;
 `
 
@@ -109,6 +103,7 @@ const MovieCardContainer = styled.div`
   grid-template-rows: 60% 25% 15%;
   grid-gap: 0;
   margin-right: ${props => `${props.margin}`};
+  color: ${props => `${props.color}`};
   justify-content: center;
   align-items: center;
   justify-items: center;
@@ -123,15 +118,6 @@ const MoviePoster = styled.img`
 const MovieTitle = styled.p`
   width: 170px;
   font-family: Inter-SemiBold;
-  color: ${props => `${props.color}`};
-  font-size: 12px;
-  text-align: center;
-  align-self: center;
-`
-
-const MovieYear = styled.p`
-  font-family: Inter-Regular;
-  color: ${props => `${props.color}`};
   font-size: 12px;
   text-align: center;
   align-self: center;
@@ -148,10 +134,12 @@ const Select = styled.button`
   border: none;
   transition: 0.2s;
   border-radius: 3px;
+  outline: none;
 
   &:hover {
     background-color: #f5c972;
     transition: 0.2s;
+    margin-bottom: 3px;
   }
 
   &:disabled {
@@ -205,25 +193,6 @@ const NomHeader = styled.p`
   margin: 0 0 0 20px;
 `
 
-const TweetButton = styled.a`
-  width: 80%;
-  margin: 20px 0 0 20px;
-  background-color: #00acee;
-  color: white;
-  border: none;
-  font-family: Inter-SemiBold;
-  font-size: 14px;
-  transition: 0.2s;
-  text-align: center;
-  text-decoration: none;
-  padding: 10px 0 10px 0;
-  border-radius: 3px;
-  &:hover {
-    opacity: 0.5;
-    transition: 0.2s;
-  }
-`
-
 const ClearAll = styled.button`
   width: 80%;
   margin: 20px 0 0 20px;
@@ -243,6 +212,45 @@ const ClearAll = styled.button`
   }
 `
 
+const Banner = styled.div`
+  width: 500px;
+  height: 100px;
+  background-color: red;
+  display: ${props => `${props.display}`};
+  left: 0;
+  right: 0;
+  margin: 50px auto 0 auto;
+  position: absolute;
+  z-index: 10;
+  background-color: #483faf;
+  border-radius: 20px;
+  -webkit-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
+  -moz-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
+  box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
+`
+
+const BannerContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const BannerContent = styled.p`
+  font-family: Inter-SemiBold;
+  font-size: 22px;
+  color: white;
+`
+
+const Close = styled.button`
+  font-family: Inter-Regular;
+  font-size: 14px;
+  color: white;
+  background: none;
+  border: none;
+  outline: none;
+`
+
 const IndexPage = () => {
   const url =
     "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s="
@@ -253,9 +261,8 @@ const IndexPage = () => {
   const [nomList, setNomList] = useState([])
   const [nomIDs, setNomIDs] = useState([])
   const nominations = []
-  const idList = []
   const [emptySearch, setEmptySearch] = useState()
-  const [disableTweet, setDisableTweet] = useState("disabled")
+  const [bannerDisplay, setBannerDisplay] = useState("none")
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value
@@ -273,7 +280,7 @@ const IndexPage = () => {
 
   const displayResults = movieList => {
     movieList.then(movies => {
-      if (movies.Search != undefined) {
+      if (movies.Search !== undefined) {
         setEmptySearch(false)
         setSearchResults(movies.Search)
       } else {
@@ -311,8 +318,8 @@ const IndexPage = () => {
     setNomIDs([...emptyList])
   }
 
-  const isMoviePosterValid = poster => {
-    if (poster == "N/A") {
+  const validatePoster = poster => {
+    if (poster === "N/A") {
       return NoImage
     } else {
       return poster
@@ -325,9 +332,13 @@ const IndexPage = () => {
     }
     if (nomIDs.includes(movie.imdbID) || nomList.length === 5) {
       return (
-        <MovieCardContainer key={movie.imdbID}>
-          <MoviePoster src={isMoviePosterValid(movie.Poster)} />
-          <MovieTitle color="white">
+        <MovieCardContainer
+          className="searchContent"
+          color="white"
+          key={movie.imdbID}
+        >
+          <MoviePoster src={validatePoster(movie.Poster)} />
+          <MovieTitle>
             {movie.Title} ({movie.Year})
           </MovieTitle>
           <Select disabled="disabled">Nominate</Select>
@@ -335,9 +346,13 @@ const IndexPage = () => {
       )
     } else
       return (
-        <MovieCardContainer key={movie.imdbID}>
-          <MoviePoster src={isMoviePosterValid(movie.Poster)} />
-          <MovieTitle color="white">
+        <MovieCardContainer
+          className="searchContent"
+          color="white"
+          key={movie.imdbID}
+        >
+          <MoviePoster src={validatePoster(movie.Poster)} />
+          <MovieTitle>
             {movie.Title} ({movie.Year})
           </MovieTitle>
           <Select onClick={() => addMovie(movie)}>Nominate</Select>
@@ -349,22 +364,86 @@ const IndexPage = () => {
     return (
       <>
         {movieList.map(movie => (
-          <MovieCardContainer key={movie.imdbID}>
-            <MoviePoster src={isMoviePosterValid(movie.Poster)} />
-            <MovieTitle color="#606060">
+          <MovieCardContainer
+            className="NominationCard"
+            color="#606060"
+            key={movie.imdbID}
+          >
+            <MoviePoster src={validatePoster(movie.Poster)} />
+            <MovieTitle>
               {movie.Title} ({movie.Year})
             </MovieTitle>
-            <Remove onClick={() => removeNom(movie)}>Remove</Remove>
+            <Remove className="NominationCard" onClick={() => removeNom(movie)}>
+              Remove
+            </Remove>
           </MovieCardContainer>
         ))}
       </>
     )
   }
 
+  useEffect(() => {
+    if (nomList.length > 4) {
+      setBannerDisplay("block")
+      gsap.to("#NominationPanel", {
+        backgroundColor: "#483faf",
+        border: "none",
+        duration: 0.5,
+      })
+      gsap.to(".NominationCard", {
+        color: "white",
+        duration: 0.5,
+      })
+      gsap.to("#SearchContainer", {
+        backgroundColor: "white",
+        border: "5px dotted #483faf",
+        duration: 0.5,
+      })
+      gsap.to(".searchContent", {
+        color: "#606060",
+        duration: 0.5,
+      })
+      gsap.to("#movieTitle", {
+        backgroundColor: "#F1F1F1",
+        duration: 0.5,
+      })
+    } else {
+      setBannerDisplay("none")
+      gsap.to("#NominationPanel", {
+        backgroundColor: "white",
+        border: "5px dotted #483faf",
+        duration: 0.5,
+      })
+      gsap.to(".NominationCard", {
+        color: "#606060",
+        duration: 0.5,
+      })
+      gsap.to("#SearchContainer", {
+        backgroundColor: "#483faf",
+        border: "none",
+        duration: 0.5,
+      })
+      gsap.to(".searchContent", {
+        color: "white",
+        duration: 0.5,
+      })
+      gsap.to("#movieTitle", {
+        backgroundColor: "white",
+        duration: 0.5,
+      })
+    }
+  }, [nomList])
+
   return (
     <>
+      <Banner display={bannerDisplay}>
+        <BannerContentContainer>
+          <BannerContent>You've nominated 5 movies! &#127881;</BannerContent>
+          <Close onClick={() => setBannerDisplay("none")}>Close</Close>
+        </BannerContentContainer>
+      </Banner>
       <PageContainer>
-        <SearchContainer>
+        <SearchContainer id="SearchContainer">
           <SearchBarWrapper>
             <SearchBar>
               <Input
@@ -375,12 +454,14 @@ const IndexPage = () => {
               <Button onClick={getSearchResults}>Search</Button>
             </SearchBar>
           </SearchBarWrapper>
-          <SearchSubtitle>{searchTerm} </SearchSubtitle>
-          <ResultsContainer>{results}</ResultsContainer>
+          <SearchSubtitle className="searchContent">
+            {searchTerm}{" "}
+          </SearchSubtitle>
+          <ResultsContainer id="ResultsContainer">{results}</ResultsContainer>
         </SearchContainer>
-        <NominationPanel>
+        <NominationPanel id="NominationPanel">
           <NomHeaderContainer>
-            <NomHeader>Your Nominations</NomHeader>
+            <NomHeader className="NominationCard">Your Nominations</NomHeader>
             <ClearAll onClick={clearAllHandler}>Clear All</ClearAll>
           </NomHeaderContainer>
           <NomsContainer>{noms(nomList)}</NomsContainer>
