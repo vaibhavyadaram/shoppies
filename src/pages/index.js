@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react"
-import styled from "styled-components"
-import NoImage from "../images/noimage.png"
-import { gsap } from "gsap"
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import NoImage from "../images/noimage.png";
+import { gsap } from "gsap";
 
 const Title = styled.p`
   position: absolute;
@@ -11,7 +11,7 @@ const Title = styled.p`
   bottom: 0;
   margin-top: auto;
   margin-bottom: auto;
-`
+`;
 
 const PageContainer = styled.div`
   display: grid;
@@ -22,7 +22,7 @@ const PageContainer = styled.div`
   height: 100vh;
   justify-items: center;
   padding-top: 20px;
-`
+`;
 
 const SearchContainer = styled.div`
   display: grid;
@@ -34,14 +34,14 @@ const SearchContainer = styled.div`
   align-self: center;
   border-radius: 20px;
   border: none;
-`
+`;
 
 const SearchBarWrapper = styled.div`
   width: 100%;
   display: flex;
 
   justify-content: center;
-`
+`;
 
 const SearchBar = styled.div`
   display: flex;
@@ -49,7 +49,7 @@ const SearchBar = styled.div`
   width: 80%;
   height: 25px;
   margin: 20px 0 0 0;
-`
+`;
 
 const SearchSubtitle = styled.div`
   color: white;
@@ -60,7 +60,7 @@ const SearchSubtitle = styled.div`
   margin: 20px 0 20px 40px;
   font-family: Inter-SemiBold;
   opacity: 0.5;
-`
+`;
 
 const Input = styled.input`
   -webkit-appearance: none;
@@ -73,7 +73,7 @@ const Input = styled.input`
   border: none;
   padding-left: 10px;
   outline: none;
-`
+`;
 
 const Button = styled.button`
   -webkit-appearance: none;
@@ -94,7 +94,7 @@ const Button = styled.button`
     transition: 0.2s;
     background-color: #f5c972;
   }
-`
+`;
 
 const ResultsContainer = styled.div`
   display: flex;
@@ -106,25 +106,25 @@ const ResultsContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`
+`;
 
 const MovieCardContainer = styled.div`
   display: grid;
   height: 90%;
   grid-template-rows: 60% 25% 15%;
   grid-gap: 0;
-  margin-right: ${props => `${props.margin}`};
-  color: ${props => `${props.color}`};
+  margin-right: ${(props) => `${props.margin}`};
+  color: ${(props) => `${props.color}`};
   justify-content: center;
   align-items: center;
   justify-items: center;
-`
+`;
 
 const MoviePoster = styled.img`
   height: 100%;
   width: auto;
   align-self: center;
-`
+`;
 
 const MovieTitle = styled.p`
   width: 170px;
@@ -132,7 +132,7 @@ const MovieTitle = styled.p`
   font-size: 12px;
   text-align: center;
   align-self: center;
-`
+`;
 
 const Select = styled.button`
   padding: 10px 15px 10px 15px;
@@ -157,7 +157,7 @@ const Select = styled.button`
     background-color: #6b6b6b;
     transition: 0.2s;
   }
-`
+`;
 
 const NominationPanel = styled.div`
   display: grid;
@@ -169,7 +169,7 @@ const NominationPanel = styled.div`
   align-self: center;
   border-radius: 20px;
   padding-top: 20px;
-`
+`;
 
 const NomsContainer = styled.div`
   display: flex;
@@ -182,7 +182,7 @@ const NomsContainer = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-`
+`;
 
 const Remove = styled.button`
   font-family: Inter-Regular;
@@ -190,19 +190,19 @@ const Remove = styled.button`
   color: #606060;
   border: none;
   background: none;
-`
+`;
 
 const NomHeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const NomHeader = styled.p`
   font-family: Inter-Bold;
   font-size: 18px;
   color: #606060;
   margin: 0 0 0 20px;
-`
+`;
 
 const ClearAll = styled.button`
   width: 80%;
@@ -221,7 +221,7 @@ const ClearAll = styled.button`
     opacity: 0.5;
     transition: 0.2s;
   }
-`
+`;
 
 const Banner = styled.div`
   width: 500px;
@@ -239,20 +239,20 @@ const Banner = styled.div`
   -webkit-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
   -moz-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
   box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
-`
+`;
 
 const BannerContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const BannerContent = styled.p`
   font-family: Inter-SemiBold;
   font-size: 22px;
   color: white;
-`
+`;
 
 const Close = styled.button`
   font-family: Inter-Regular;
@@ -261,86 +261,86 @@ const Close = styled.button`
   background: none;
   border: none;
   outline: none;
-`
+`;
 
 const IndexPage = () => {
   const url =
-    "http://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s="
-  const [searchResults, setSearchResults] = useState([])
+    "https://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s=";
+  const [searchResults, setSearchResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState(
     "Search for your favourite movies to nominate!"
-  )
-  const [nomList, setNomList] = useState([])
-  const [nomIDs, setNomIDs] = useState([])
-  const nominations = []
-  const [emptySearch, setEmptySearch] = useState()
-  const [bannerDisplay, setBannerDisplay] = useState("none")
+  );
+  const [nomList, setNomList] = useState([]);
+  const [nomIDs, setNomIDs] = useState([]);
+  const nominations = [];
+  const [emptySearch, setEmptySearch] = useState();
+  const [bannerDisplay, setBannerDisplay] = useState("none");
 
   const getSearchResults = () => {
-    const movieTitle = document.getElementById("movieTitle").value
-    setSearchTerm("Search results for: " + movieTitle)
+    const movieTitle = document.getElementById("movieTitle").value;
+    setSearchTerm("Search results for: " + movieTitle);
     const movieList = fetch(url + movieTitle)
-      .then(success => success.json())
-      .then(movies => {
-        return movies
+      .then((success) => success.json())
+      .then((movies) => {
+        return movies;
       })
-      .catch(err => {
-        console.log(err)
-      })
-    displayResults(movieList)
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+    displayResults(movieList);
+  };
 
-  const displayResults = movieList => {
-    movieList.then(movies => {
+  const displayResults = (movieList) => {
+    movieList.then((movies) => {
       if (movies.Search !== undefined) {
-        setEmptySearch(false)
-        setSearchResults(movies.Search)
+        setEmptySearch(false);
+        setSearchResults(movies.Search);
       } else {
         setSearchTerm(
           "Hmmm, I couldn't find anything with that title! Try again!"
-        )
-        setEmptySearch(true)
+        );
+        setEmptySearch(true);
       }
-    })
-  }
+    });
+  };
 
-  const addMovie = selectedMovie => {
-    nominations.push(selectedMovie.Title)
-    setNomList(nominations => [...nominations, selectedMovie])
-    setNomIDs([...nomIDs, selectedMovie.imdbID])
-  }
+  const addMovie = (selectedMovie) => {
+    nominations.push(selectedMovie.Title);
+    setNomList((nominations) => [...nominations, selectedMovie]);
+    setNomIDs([...nomIDs, selectedMovie.imdbID]);
+  };
 
-  const removeNom = title => {
+  const removeNom = (title) => {
     if (nomList.includes(title)) {
-      const titleIndex = nomList.indexOf(title)
-      const newList = nomList
-      newList.splice(titleIndex, 1)
-      setNomList([...newList])
+      const titleIndex = nomList.indexOf(title);
+      const newList = nomList;
+      newList.splice(titleIndex, 1);
+      setNomList([...newList]);
 
-      const idIndex = nomIDs.indexOf(title.imdbID)
-      const newIDList = nomIDs
-      newIDList.splice(idIndex, 1)
-      setNomIDs([...newIDList])
+      const idIndex = nomIDs.indexOf(title.imdbID);
+      const newIDList = nomIDs;
+      newIDList.splice(idIndex, 1);
+      setNomIDs([...newIDList]);
     }
-  }
+  };
 
   const clearAllHandler = () => {
-    const emptyList = []
-    setNomList([...emptyList])
-    setNomIDs([...emptyList])
-  }
+    const emptyList = [];
+    setNomList([...emptyList]);
+    setNomIDs([...emptyList]);
+  };
 
-  const validatePoster = poster => {
+  const validatePoster = (poster) => {
     if (poster === "N/A") {
-      return NoImage
+      return NoImage;
     } else {
-      return poster
+      return poster;
     }
-  }
+  };
 
-  const results = searchResults.map(movie => {
+  const results = searchResults.map((movie) => {
     if (emptySearch) {
-      setSearchResults([])
+      setSearchResults([]);
     }
     if (nomIDs.includes(movie.imdbID) || nomList.length === 5) {
       return (
@@ -355,7 +355,7 @@ const IndexPage = () => {
           </MovieTitle>
           <Select disabled="disabled">Nominate</Select>
         </MovieCardContainer>
-      )
+      );
     } else
       return (
         <MovieCardContainer
@@ -369,13 +369,13 @@ const IndexPage = () => {
           </MovieTitle>
           <Select onClick={() => addMovie(movie)}>Nominate</Select>
         </MovieCardContainer>
-      )
-  })
+      );
+  });
 
-  const noms = movieList => {
+  const noms = (movieList) => {
     return (
       <>
-        {movieList.map(movie => (
+        {movieList.map((movie) => (
           <MovieCardContainer
             className="NominationCard"
             color="#606060"
@@ -391,8 +391,8 @@ const IndexPage = () => {
           </MovieCardContainer>
         ))}
       </>
-    )
-  }
+    );
+  };
 
   useEffect(() => {
     if (nomList.length > 4) {
@@ -401,60 +401,60 @@ const IndexPage = () => {
         marginTop: "50px",
         autoAlpha: 1,
         duration: 0.5,
-      })
+      });
       gsap.to("#NominationPanel", {
         backgroundColor: "#483faf",
         border: "none",
         duration: 0.5,
-      })
+      });
       gsap.to(".NominationCard", {
         color: "white",
         duration: 0.5,
-      })
+      });
       gsap.to("#SearchContainer", {
         backgroundColor: "white",
         border: "5px dashed #483faf",
         duration: 0.5,
-      })
+      });
       gsap.to(".searchContent", {
         color: "#606060",
         duration: 0.5,
-      })
+      });
       gsap.to("#movieTitle", {
         backgroundColor: "#F1F1F1",
         duration: 0.5,
-      })
+      });
     } else {
       gsap.to("#NominationPanel", {
         backgroundColor: "white",
         border: "5px dashed #483faf",
         duration: 0.5,
-      })
+      });
       gsap.to(".NominationCard", {
         color: "#606060",
         duration: 0.5,
-      })
+      });
       gsap.to("#SearchContainer", {
         backgroundColor: "#483faf",
         border: "none",
         duration: 0.5,
-      })
+      });
       gsap.to(".searchContent", {
         color: "white",
         duration: 0.5,
-      })
+      });
       gsap.to("#movieTitle", {
         backgroundColor: "white",
         duration: 0.5,
-      })
+      });
       gsap.to("#Banner", {
         display: "none",
         marginTop: "0px",
         autoAlpha: 0,
         duration: 0.5,
-      })
+      });
     }
-  }, [nomList])
+  }, [nomList]);
 
   const CloseBanner = () => {
     gsap.to("#Banner", {
@@ -462,8 +462,8 @@ const IndexPage = () => {
       marginTop: "0px",
       autoAlpha: 0,
       duration: 0.5,
-    })
-  }
+    });
+  };
 
   return (
     <>
@@ -500,7 +500,7 @@ const IndexPage = () => {
         </NominationPanel>
       </PageContainer>
     </>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;
