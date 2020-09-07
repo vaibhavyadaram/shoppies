@@ -206,6 +206,7 @@ const NominationPanel = styled.div`
   -webkit-box-sizing: border-box;
   @media (max-width: 800px) {
     grid-template-columns: 1fr;
+    margin-bottom: 30px;
   }
 `;
 
