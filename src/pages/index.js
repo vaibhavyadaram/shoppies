@@ -331,6 +331,7 @@ const IndexPage = () => {
   const [nomIDs, setNomIDs] = useState([]);
   const nominations = [];
   const [emptySearch, setEmptySearch] = useState();
+  const [shareLink, setShareLink] = useState();
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value;
@@ -405,7 +406,7 @@ const IndexPage = () => {
           color="white"
           key={movie.imdbID}
         >
-          <MoviePoster src={validatePoster(movie.Poster)} />
+          <MoviePoster alt={movie.Title} src={validatePoster(movie.Poster)} />
           <MovieTitle>
             {movie.Title} ({movie.Year})
           </MovieTitle>
@@ -419,7 +420,7 @@ const IndexPage = () => {
           color="white"
           key={movie.imdbID}
         >
-          <MoviePoster src={validatePoster(movie.Poster)} />
+          <MoviePoster alt={movie.Title} src={validatePoster(movie.Poster)} />
           <MovieTitle>
             {movie.Title} ({movie.Year})
           </MovieTitle>
@@ -437,7 +438,7 @@ const IndexPage = () => {
             color="#606060"
             key={movie.imdbID}
           >
-            <MoviePoster src={validatePoster(movie.Poster)} />
+            <MoviePoster alt={movie.Title} src={validatePoster(movie.Poster)} />
             <MovieTitle>
               {movie.Title} ({movie.Year})
             </MovieTitle>
