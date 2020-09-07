@@ -304,6 +304,11 @@ const BannerContentContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media (max-width: 800px) {
+    width: 90%;
+    height: auto;
+    padding: 0 0 30px 0;
+  }
 `;
 
 const BannerContent = styled.p`
@@ -333,6 +338,12 @@ const IndexPage = () => {
   const nominations = [];
   const [emptySearch, setEmptySearch] = useState();
   const [shareLink, setShareLink] = useState();
+
+  const isEnter = (e) => {
+    if (e.keyCode === 13) {
+      getSearchResults();
+    }
+  };
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value;
@@ -550,6 +561,7 @@ const IndexPage = () => {
                 type="text"
                 id="movieTitle"
                 placeholder="Search for a movie"
+                onKeyDown={isEnter}
               />
               <Button onClick={getSearchResults}>Search</Button>
             </SearchBar>
