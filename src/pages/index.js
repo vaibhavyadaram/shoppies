@@ -481,6 +481,11 @@ const IndexPage = () => {
         backgroundColor: "#F1F1F1",
         duration: 0.5,
       });
+      gsap.to("#Title", {
+        color: "#606060",
+        duration: 0.5,
+        opacity: 1,
+      });
     } else {
       gsap.to("#NominationPanel", {
         backgroundColor: "white",
@@ -509,6 +514,11 @@ const IndexPage = () => {
         marginTop: "0px",
         autoAlpha: 0,
         duration: 0.5,
+      });
+      gsap.to("#Title", {
+        color: "white",
+        duration: 0.5,
+        opacity: 0.7,
       });
     }
   }, [nomList]);
@@ -543,7 +553,7 @@ const IndexPage = () => {
               <Button onClick={getSearchResults}>Search</Button>
             </SearchBar>
             <TitleContainer>
-              <Title>The Shoppies</Title>
+              <Title id="Title">The Shoppies</Title>
             </TitleContainer>
           </SearchBarWrapper>
           <SearchSubtitle className="searchContent">
