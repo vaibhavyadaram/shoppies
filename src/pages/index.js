@@ -86,8 +86,9 @@ const SearchSubtitle = styled.div`
   opacity: 0.5;
   @media (max-width: 800px) {
     justify-content: center;
-    margin: 0 0 0 0;
+    margin: 20px 0 0 0;
     text-align: center;
+    font-size: 14px;
   }
 `;
 
@@ -122,6 +123,10 @@ const Button = styled.button`
   &:hover {
     transition: 0.2s;
     background-color: #f5c972;
+  }
+
+  @media (max-width: 800px) {
+    height: 32px;
   }
 `;
 
@@ -305,9 +310,11 @@ const BannerContentContainer = styled.div`
   justify-content: center;
   align-items: center;
   @media (max-width: 800px) {
-    width: 90%;
+    width: 80%;
+    margin-left: 10%;
     height: auto;
     padding: 0 0 30px 0;
+    text-align: center;
   }
 `;
 
