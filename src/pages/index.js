@@ -103,6 +103,9 @@ const Input = styled.input`
   border: none;
   padding-left: 10px;
   outline: none;
+  @media (max-width: 800px) {
+    border-radius: 10px 10px 10px 10px;
+  }
 `;
 
 const Button = styled.button`
@@ -126,7 +129,9 @@ const Button = styled.button`
   }
 
   @media (max-width: 800px) {
-    height: 32px;
+    border-radius: 10px 10px 10px 10px;
+    width: 25%;
+    margin-left: 10px;
   }
 `;
 
