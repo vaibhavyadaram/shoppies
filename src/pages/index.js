@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import NoImage from "../images/noimage.png";
 import { gsap } from "gsap";
+import { debounce } from "lodash";
 
 const Title = styled.p`
   font-family: Inter-Bold;
@@ -349,13 +350,10 @@ const IndexPage = () => {
   const [nomIDs, setNomIDs] = useState([]);
   const nominations = [];
   const [emptySearch, setEmptySearch] = useState();
-  const [shareLink, setShareLink] = useState();
 
-  const isEnter = (e) => {
-    if (e.keyCode === 13) {
-      getSearchResults();
-    }
-  };
+  const submitSearch = debounce(() => {
+    getSearchResults();
+  }, 200);
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value;
@@ -475,6 +473,15 @@ const IndexPage = () => {
     );
   };
 
+  const CloseBanner = () => {
+    gsap.to("#Banner", {
+      display: "none",
+      marginTop: "0px",
+      autoAlpha: 0,
+      duration: 0.5,
+    });
+  };
+
   useEffect(() => {
     if (nomList.length > 4) {
       gsap.to("#Banner", {
@@ -547,18 +554,8 @@ const IndexPage = () => {
     }
   }, [nomList]);
 
-  const CloseBanner = () => {
-    gsap.to("#Banner", {
-      display: "none",
-      marginTop: "0px",
-      autoAlpha: 0,
-      duration: 0.5,
-    });
-  };
-
   return (
     <>
-      {/* <Title>The Shoppies</Title> */}
       <Banner id="Banner">
         <BannerContentContainer>
           <BannerContent>You've nominated 5 movies! &#127881;</BannerContent>
@@ -573,7 +570,7 @@ const IndexPage = () => {
                 type="text"
                 id="movieTitle"
                 placeholder="Search for a movie"
-                onKeyDown={isEnter}
+                onKeyDown={submitSearch}
               />
               <Button onClick={getSearchResults}>Search</Button>
             </SearchBar>
