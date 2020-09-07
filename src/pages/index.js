@@ -4,13 +4,21 @@ import NoImage from "../images/noimage.png";
 import { gsap } from "gsap";
 
 const Title = styled.p`
-  position: absolute;
-  transform-origin: 0 0;
-  transform: rotate(90deg);
-  top: 0;
-  bottom: 0;
-  margin-top: auto;
-  margin-bottom: auto;
+  font-family: Inter-Bold;
+  font-size: 34px;
+  color: white;
+`;
+
+const TitleContainer = styled.div`
+  width: 50%;
+  text-align: right;
+  justify-self: center;
+  align-self: center;
+  margin: 20px 40px 0 0;
+  opacity: 0.7;
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const PageContainer = styled.div`
@@ -22,6 +30,9 @@ const PageContainer = styled.div`
   height: 100vh;
   justify-items: center;
   padding-top: 20px;
+  @media (max-width: 800px) {
+    grid-template-rows: 60vh auto;
+  }
 `;
 
 const SearchContainer = styled.div`
@@ -34,21 +45,34 @@ const SearchContainer = styled.div`
   align-self: center;
   border-radius: 20px;
   border: none;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  @media (max-width: 800px) {
+  }
 `;
 
 const SearchBarWrapper = styled.div`
   width: 100%;
   display: flex;
-
-  justify-content: center;
+  flex-direction: row;
+  @media (max-width: 800px) {
+    justify-content: center;
+  }
 `;
 
 const SearchBar = styled.div`
   display: flex;
   flex-direction: row;
-  width: 80%;
+  width: 50%;
   height: 25px;
-  margin: 20px 0 0 0;
+  margin: 20px 0 0 40px;
+  align-self: flex-start;
+  justify-self: flex-start;
+  @media (max-width: 800px) {
+    margin: 20px 0 0 0;
+    width: 80%;
+  }
 `;
 
 const SearchSubtitle = styled.div`
@@ -60,6 +84,11 @@ const SearchSubtitle = styled.div`
   margin: 20px 0 20px 40px;
   font-family: Inter-SemiBold;
   opacity: 0.5;
+  @media (max-width: 800px) {
+    justify-content: center;
+    margin: 0 0 0 0;
+    text-align: center;
+  }
 `;
 
 const Input = styled.input`
@@ -83,7 +112,7 @@ const Button = styled.button`
   text-align: center;
   border: none;
   height: 25px;
-  width: 10%;
+  width: 30%;
   border-radius: 0px 10px 10px 0px;
   outline: none;
   transition: 0.2s;
@@ -118,6 +147,9 @@ const MovieCardContainer = styled.div`
   justify-content: center;
   align-items: center;
   justify-items: center;
+  @media (max-width: 500px) {
+    height: 250px;
+  }
 `;
 
 const MoviePoster = styled.img`
@@ -169,16 +201,21 @@ const NominationPanel = styled.div`
   align-self: center;
   border-radius: 20px;
   padding-top: 20px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const NomsContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 100%;
-  width: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
-  padding: 0 0 0 0;
+  padding: 0 40px 0 40px;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -190,11 +227,18 @@ const Remove = styled.button`
   color: #606060;
   border: none;
   background: none;
+  @media (max-width: 800px) {
+    margin: 0;
+  }
 `;
 
 const NomHeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media (max-width: 800px) {
+    align-items: center;
+    margin-bottom: 30px;
+  }
 `;
 
 const NomHeader = styled.p`
@@ -202,6 +246,9 @@ const NomHeader = styled.p`
   font-size: 18px;
   color: #606060;
   margin: 0 0 0 20px;
+  @media (max-width: 800px) {
+    margin: 0;
+  }
 `;
 
 const ClearAll = styled.button`
@@ -221,6 +268,10 @@ const ClearAll = styled.button`
     opacity: 0.5;
     transition: 0.2s;
   }
+  @media (max-width: 800px) {
+    width: 40%;
+    margin: 20px 0 0 0;
+  }
 `;
 
 const Banner = styled.div`
@@ -239,6 +290,12 @@ const Banner = styled.div`
   -webkit-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
   -moz-box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
   box-shadow: 0px 0px 26px 3px rgba(0, 0, 0, 0.69);
+
+  @media (max-width: 800px) {
+    width: 90%;
+    height: auto;
+    padding: 0 0 30px 0;
+  }
 `;
 
 const BannerContentContainer = styled.div`
@@ -274,11 +331,10 @@ const IndexPage = () => {
   const [nomIDs, setNomIDs] = useState([]);
   const nominations = [];
   const [emptySearch, setEmptySearch] = useState();
-  const [bannerDisplay, setBannerDisplay] = useState("none");
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value;
-    setSearchTerm("Search results for: " + movieTitle);
+    setSearchTerm('Search results for: "' + movieTitle + '"');
     const movieList = fetch(url + movieTitle)
       .then((success) => success.json())
       .then((movies) => {
@@ -485,6 +541,9 @@ const IndexPage = () => {
               />
               <Button onClick={getSearchResults}>Search</Button>
             </SearchBar>
+            <TitleContainer>
+              <Title>The Shoppies</Title>
+            </TitleContainer>
           </SearchBarWrapper>
           <SearchSubtitle className="searchContent">
             {searchTerm}{" "}

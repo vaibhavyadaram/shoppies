@@ -5,6 +5,7 @@ const preferDefault = m => (m && m.default) || m
 
 
 exports.components = {
+  "component---cache-dev-404-page-js": hot(preferDefault(require("/Users/vaibhavyadaram/Documents/projects/shopify/shoppies/.cache/dev-404-page.js"))),
   "component---src-pages-index-js": hot(preferDefault(require("/Users/vaibhavyadaram/Documents/projects/shopify/shoppies/src/pages/index.js")))
 }
 

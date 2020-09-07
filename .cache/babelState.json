@@ -11,6 +11,10 @@
           }
         },
         {
+          "name": "babel-plugin-lodash",
+          "options": {}
+        },
+        {
           "name": "/Users/vaibhavyadaram/Documents/projects/shopify/shoppies/node_modules/@babel/plugin-proposal-optional-chaining/lib/index.js",
           "options": {}
         },
@@ -38,6 +42,10 @@
     },
     "develop-html": {
       "plugins": [
+        {
+          "name": "babel-plugin-lodash",
+          "options": {}
+        },
         {
           "name": "/Users/vaibhavyadaram/Documents/projects/shopify/shoppies/node_modules/@babel/plugin-proposal-optional-chaining/lib/index.js",
           "options": {}
@@ -75,6 +83,10 @@
     "build-html": {
       "plugins": [
         {
+          "name": "babel-plugin-lodash",
+          "options": {}
+        },
+        {
           "name": "/Users/vaibhavyadaram/Documents/projects/shopify/shoppies/node_modules/@babel/plugin-proposal-optional-chaining/lib/index.js",
           "options": {}
         },
@@ -110,6 +122,10 @@
     },
     "build-javascript": {
       "plugins": [
+        {
+          "name": "babel-plugin-lodash",
+          "options": {}
+        },
         {
           "name": "/Users/vaibhavyadaram/Documents/projects/shopify/shoppies/node_modules/@babel/plugin-proposal-optional-chaining/lib/index.js",
           "options": {}
