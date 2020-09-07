@@ -103,7 +103,6 @@ const Input = styled.input`
   border-radius: 10px 0px 0px 10px;
   border: none;
   padding-left: 10px;
-  outline: none;
   @media (max-width: 800px) {
     border-radius: 10px 10px 10px 10px;
   }
@@ -119,7 +118,6 @@ const Button = styled.button`
   height: 25px;
   width: 30%;
   border-radius: 0px 10px 10px 0px;
-  outline: none;
   transition: 0.2s;
   background-color: #d88e00;
   color: white;
@@ -188,7 +186,6 @@ const Select = styled.button`
   border: none;
   transition: 0.2s;
   border-radius: 3px;
-  outline: none;
 
   &:hover {
     background-color: #f5c972;
@@ -336,7 +333,6 @@ const Close = styled.button`
   color: white;
   background: none;
   border: none;
-  outline: none;
 `;
 
 const IndexPage = () => {
