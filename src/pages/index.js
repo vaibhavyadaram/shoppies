@@ -128,6 +128,7 @@ const Button = styled.button`
   &:hover {
     transition: 0.2s;
     background-color: #f5c972;
+    cursor: pointer;
   }
 
   @media (max-width: 800px) {
@@ -194,6 +195,7 @@ const Select = styled.button`
     background-color: #f5c972;
     transition: 0.2s;
     margin-bottom: 3px;
+    cursor: pointer;
   }
 
   &:disabled {
@@ -241,6 +243,7 @@ const Remove = styled.button`
   background: none;
   @media (max-width: 800px) {
     margin: 0;
+    cursor: pointer;
   }
 `;
 
@@ -279,6 +282,7 @@ const ClearAll = styled.button`
   &:hover {
     opacity: 0.5;
     transition: 0.2s;
+    cursor: pointer;
   }
   @media (max-width: 800px) {
     width: 40%;
@@ -336,6 +340,10 @@ const Close = styled.button`
   color: white;
   background: none;
   border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const IndexPage = () => {
