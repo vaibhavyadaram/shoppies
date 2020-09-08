@@ -556,6 +556,7 @@ const IndexPage = () => {
   return (
     <>
       <Helmet
+        htmlAttributes={{ lang: "en" }}
         link={[
           {
             rel: "icon",
