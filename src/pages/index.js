@@ -577,6 +577,10 @@ const IndexPage = () => {
         ]}
       >
         <title>The Shoppies</title>
+        <meta
+          name="The Shoppies: Movie awards for entrepreneurs"
+          content="The Shoppies"
+        />
       </Helmet>
       <Banner id="Banner">
         <BannerContentContainer>
