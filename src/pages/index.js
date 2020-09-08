@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import NoImage from "../images/noimage.png";
+import fav16 from "../images/favicon16.png";
+import fav32 from "../images/favicon32.png";
 import { gsap } from "gsap";
 import { debounce } from "lodash";
+import { Helmet } from "react-helmet";
 
 const Title = styled.p`
   font-family: Inter-Bold;
@@ -552,6 +555,28 @@ const IndexPage = () => {
 
   return (
     <>
+      <Helmet
+        link={[
+          {
+            rel: "icon",
+            type: "image/png",
+            sizes: "16x16",
+            href: `${fav16}`,
+          },
+          {
+            rel: "icon",
+            type: "image/png",
+            sizes: "32x32",
+            href: `${fav32}`,
+          },
+          {
+            rel: "stylesheet",
+            href: "https://use.typekit.net/ggs2buq.css",
+          },
+        ]}
+      >
+        <title>The Shoppies</title>
+      </Helmet>
       <Banner id="Banner">
         <BannerContentContainer>
           <BannerContent>You've nominated 5 movies! &#127881;</BannerContent>
