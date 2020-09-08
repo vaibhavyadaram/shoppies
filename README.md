@@ -15,4 +15,5 @@ Here's my challenge submission for Shopify's Winter 2021 UX developer internship
 3. Remove movies and update your nomination list if needed!
 
 4. Explore on mobile
+
 ![alt text](https://i.imgur.com/10mgZUQ.png "Explore on mobile")
