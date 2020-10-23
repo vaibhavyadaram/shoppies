@@ -350,17 +350,12 @@ const IndexPage = () => {
   const url =
     "https://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s=";
   const [searchResults, setSearchResults] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(
-    "Search for your favourite movies to nominate!"
-  );
-  const [nomList, setNomList] = useState([]);
-  const [nomIDs, setNomIDs] = useState([]);
-  const nominations = [];
+  const [searchTerm, setSearchTerm] = useState( "Search for your favourite movies to nominate!");
   const [emptySearch, setEmptySearch] = useState();
+  let nomSet = new Set();
+  const [nominateSet, setNominateSet] = useState(nomSet);
 
-  const submitSearch = debounce(() => {
-    getSearchResults();
-  }, 200);
+  const submitSearch = debounce(() => { getSearchResults() }, 200);
 
   const getSearchResults = () => {
     const movieTitle = document.getElementById("movieTitle").value;
@@ -391,29 +386,22 @@ const IndexPage = () => {
   };
 
   const addMovie = (selectedMovie) => {
-    nominations.push(selectedMovie.Title);
-    setNomList((nominations) => [...nominations, selectedMovie]);
-    setNomIDs([...nomIDs, selectedMovie.imdbID]);
+    const updateNoms = new Set(nominateSet)
+    updateNoms.add(selectedMovie)
+    setNominateSet(updateNoms)
   };
 
   const removeNom = (title) => {
-    if (nomList.includes(title)) {
-      const titleIndex = nomList.indexOf(title);
-      const newList = nomList;
-      newList.splice(titleIndex, 1);
-      setNomList([...newList]);
-
-      const idIndex = nomIDs.indexOf(title.imdbID);
-      const newIDList = nomIDs;
-      newIDList.splice(idIndex, 1);
-      setNomIDs([...newIDList]);
+    if (nominateSet.has(title)) {
+    const updateNoms = new Set(nominateSet)
+    updateNoms.delete(title)
+    setNominateSet(updateNoms)
     }
   };
 
   const clearAllHandler = () => {
-    const emptyList = [];
-    setNomList([...emptyList]);
-    setNomIDs([...emptyList]);
+    const updateNoms = new Set()
+    setNominateSet(updateNoms)
   };
 
   const validatePoster = (poster) => {
@@ -428,7 +416,7 @@ const IndexPage = () => {
     if (emptySearch) {
       setSearchResults([]);
     }
-    if (nomIDs.includes(movie.imdbID) || nomList.length === 5) {
+    if (nominateSet.has(movie) || nominateSet.size === 5) {
       return (
         <MovieCardContainer
           className="searchContent"
@@ -458,10 +446,10 @@ const IndexPage = () => {
       );
   });
 
-  const noms = (movieList) => {
+  const noms = (nominateSet) => {
+    const nomsArray = [...nominateSet];
     return (
-      <>
-        {movieList.map((movie) => (
+        nomsArray.map((movie) => (
           <MovieCardContainer
             className="NominationCard"
             color="#606060"
@@ -475,91 +463,33 @@ const IndexPage = () => {
               Remove
             </Remove>
           </MovieCardContainer>
-        ))}
-      </>
+        ))
     );
   };
 
   const CloseBanner = () => {
-    gsap.to("#Banner", {
-      display: "none",
-      marginTop: "0px",
-      autoAlpha: 0,
-      duration: 0.5,
-    });
+    gsap.to("#Banner", {display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5,});
   };
 
   useEffect(() => {
-    if (nomList.length > 4) {
-      gsap.to("#Banner", {
-        display: "block",
-        marginTop: "50px",
-        autoAlpha: 1,
-        duration: 0.5,
-      });
-      gsap.to("#NominationPanel", {
-        backgroundColor: "#483faf",
-        border: "none",
-        duration: 0.5,
-      });
-      gsap.to(".NominationCard", {
-        color: "white",
-        duration: 0.5,
-      });
-      gsap.to("#SearchContainer", {
-        backgroundColor: "white",
-        border: "5px dashed #483faf",
-        duration: 0.5,
-      });
-      gsap.to(".searchContent", {
-        color: "#606060",
-        duration: 0.5,
-      });
-      gsap.to("#movieTitle", {
-        backgroundColor: "#F1F1F1",
-        duration: 0.5,
-      });
-      gsap.to("#Title", {
-        color: "#606060",
-        duration: 0.5,
-        opacity: 1,
-      });
+    if (nominateSet.size > 4) {
+      gsap.to("#Banner", { display: "block", marginTop: "50px", autoAlpha: 1, duration: 0.5,});
+      gsap.to("#NominationPanel", { backgroundColor: "#483faf", border: "none", duration: 0.5, });
+      gsap.to(".NominationCard", { color: "white", duration: 0.5,});
+      gsap.to("#SearchContainer", { backgroundColor: "white", border: "5px dashed #483faf", duration: 0.5, });
+      gsap.to(".searchContent", {color: "#606060", duration: 0.5, });
+      gsap.to("#movieTitle", { backgroundColor: "#F1F1F1", duration: 0.5, });
+      gsap.to("#Title", { color: "#606060", duration: 0.5, opacity: 1, });
     } else {
-      gsap.to("#NominationPanel", {
-        backgroundColor: "white",
-        border: "5px dashed #483faf",
-        duration: 0.5,
-      });
-      gsap.to(".NominationCard", {
-        color: "#606060",
-        duration: 0.5,
-      });
-      gsap.to("#SearchContainer", {
-        backgroundColor: "#483faf",
-        border: "none",
-        duration: 0.5,
-      });
-      gsap.to(".searchContent", {
-        color: "white",
-        duration: 0.5,
-      });
-      gsap.to("#movieTitle", {
-        backgroundColor: "white",
-        duration: 0.5,
-      });
-      gsap.to("#Banner", {
-        display: "none",
-        marginTop: "0px",
-        autoAlpha: 0,
-        duration: 0.5,
-      });
-      gsap.to("#Title", {
-        color: "white",
-        duration: 0.5,
-        opacity: 0.7,
-      });
+      gsap.to("#NominationPanel", { backgroundColor: "white",border: "5px dashed #483faf", duration: 0.5, });
+      gsap.to(".NominationCard", { color: "#606060", duration: 0.5, });
+      gsap.to("#SearchContainer", { backgroundColor: "#483faf", border: "none", duration: 0.5, });
+      gsap.to(".searchContent", { color: "white", duration: 0.5, });
+      gsap.to("#movieTitle", { backgroundColor: "white", duration: 0.5, });
+      gsap.to("#Banner", { display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5, });
+      gsap.to("#Title", {color: "white", duration: 0.5, opacity: 0.7,});
     }
-  }, [nomList]);
+  }, [nominateSet]);
 
   return (
     <>
@@ -622,7 +552,7 @@ const IndexPage = () => {
             <NomHeader className="NominationCard">Your Nominations</NomHeader>
             <ClearAll onClick={clearAllHandler}>Clear All</ClearAll>
           </NomHeaderContainer>
-          <NomsContainer>{noms(nomList)}</NomsContainer>
+          <NomsContainer>{noms(nominateSet)}</NomsContainer>
         </NominationPanel>
       </PageContainer>
     </>
