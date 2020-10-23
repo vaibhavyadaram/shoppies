@@ -122,7 +122,7 @@ const Button = styled.button`
   width: 30%;
   border-radius: 0px 10px 10px 0px;
   transition: 0.2s;
-  background-color: #d88e00;
+  background-color: #B37400;
   color: white;
 
   &:hover {
@@ -352,15 +352,15 @@ const IndexPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState( "Search for your favourite movies to nominate!");
   const [emptySearch, setEmptySearch] = useState();
-  let nomSet = new Set();
-  const [nominateSet, setNominateSet] = useState(nomSet);
+  let nominationSet = new Set();
+  const [nominations, setNominations] = useState(nominationSet);
 
   const submitSearch = debounce(() => { getSearchResults() }, 200);
 
   const getSearchResults = () => {
-    const movieTitle = document.getElementById("movieTitle").value;
-    setSearchTerm('Search results for: "' + movieTitle + '"');
-    const movieList = fetch(url + movieTitle)
+    const query = document.getElementById("movieTitle").value;
+    setSearchTerm('Search results for: "' + query + '"');
+    const movieList = fetch(url + query)
       .then((success) => success.json())
       .then((movies) => {
         return movies;
@@ -386,22 +386,22 @@ const IndexPage = () => {
   };
 
   const addMovie = (selectedMovie) => {
-    const updateNoms = new Set(nominateSet)
+    const updateNoms = new Set(nominations)
     updateNoms.add(selectedMovie)
-    setNominateSet(updateNoms)
+    setNominations(updateNoms)
   };
 
   const removeNom = (title) => {
-    if (nominateSet.has(title)) {
-    const updateNoms = new Set(nominateSet)
+    if (nominations.has(title)) {
+    const updateNoms = new Set(nominations)
     updateNoms.delete(title)
-    setNominateSet(updateNoms)
+    setNominations(updateNoms)
     }
   };
 
   const clearAllHandler = () => {
     const updateNoms = new Set()
-    setNominateSet(updateNoms)
+    setNominations(updateNoms)
   };
 
   const validatePoster = (poster) => {
@@ -412,11 +412,19 @@ const IndexPage = () => {
     }
   };
 
-  const results = searchResults.map((movie) => {
+  const validateNomination = (movie) => {
+    for (let nom of nominations.keys()) {
+      if (nom.imdbID === movie.imdbID){
+        return true;
+      } 
+    }
+  }
+
+  const renderResults = searchResults.map((movie) => {
     if (emptySearch) {
       setSearchResults([]);
     }
-    if (nominateSet.has(movie) || nominateSet.size === 5) {
+    if (validateNomination(movie) || nominations.size === 5) {
       return (
         <MovieCardContainer
           className="searchContent"
@@ -446,8 +454,8 @@ const IndexPage = () => {
       );
   });
 
-  const noms = (nominateSet) => {
-    const nomsArray = [...nominateSet];
+  const renderNominations = (nominations) => {
+    const nomsArray = [...nominations];
     return (
         nomsArray.map((movie) => (
           <MovieCardContainer
@@ -472,24 +480,24 @@ const IndexPage = () => {
   };
 
   useEffect(() => {
-    if (nominateSet.size > 4) {
+    if (nominations.size > 4) {
       gsap.to("#Banner", { display: "block", marginTop: "50px", autoAlpha: 1, duration: 0.5,});
-      gsap.to("#NominationPanel", { backgroundColor: "#483faf", border: "none", duration: 0.5, });
+      gsap.to("#NominationPanel", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
       gsap.to(".NominationCard", { color: "white", duration: 0.5,});
-      gsap.to("#SearchContainer", { backgroundColor: "white", border: "5px dashed #483faf", duration: 0.5, });
+      gsap.to("#SearchContainer", { backgroundColor: "white", border: "5px dashed #483faf", duration: 0.2, });
       gsap.to(".searchContent", {color: "#606060", duration: 0.5, });
       gsap.to("#movieTitle", { backgroundColor: "#F1F1F1", duration: 0.5, });
       gsap.to("#Title", { color: "#606060", duration: 0.5, opacity: 1, });
     } else {
-      gsap.to("#NominationPanel", { backgroundColor: "white",border: "5px dashed #483faf", duration: 0.5, });
+      gsap.to("#NominationPanel", { backgroundColor: "white",border: "5px dashed #483faf", duration: 0.2, });
       gsap.to(".NominationCard", { color: "#606060", duration: 0.5, });
-      gsap.to("#SearchContainer", { backgroundColor: "#483faf", border: "none", duration: 0.5, });
+      gsap.to("#SearchContainer", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
       gsap.to(".searchContent", { color: "white", duration: 0.5, });
       gsap.to("#movieTitle", { backgroundColor: "white", duration: 0.5, });
       gsap.to("#Banner", { display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5, });
       gsap.to("#Title", {color: "white", duration: 0.5, opacity: 0.7,});
     }
-  }, [nominateSet]);
+  }, [nominations]);
 
   return (
     <>
@@ -522,7 +530,7 @@ const IndexPage = () => {
       </Helmet>
       <Banner id="Banner">
         <BannerContentContainer>
-          <BannerContent>You've nominated 5 movies! &#127881;</BannerContent>
+          <BannerContent>You've nominated 5 movies! <span role="img" aria-label="Celebrate">&#127881;</span></BannerContent>
           <Close onClick={CloseBanner}>Close</Close>
         </BannerContentContainer>
       </Banner>
@@ -545,14 +553,14 @@ const IndexPage = () => {
           <SearchSubtitle className="searchContent">
             {searchTerm}{" "}
           </SearchSubtitle>
-          <ResultsContainer id="ResultsContainer">{results}</ResultsContainer>
+          <ResultsContainer id="ResultsContainer">{renderResults}</ResultsContainer>
         </SearchContainer>
         <NominationPanel id="NominationPanel">
           <NomHeaderContainer>
             <NomHeader className="NominationCard">Your Nominations</NomHeader>
             <ClearAll onClick={clearAllHandler}>Clear All</ClearAll>
           </NomHeaderContainer>
-          <NomsContainer>{noms(nominateSet)}</NomsContainer>
+          <NomsContainer>{renderNominations(nominations)}</NomsContainer>
         </NominationPanel>
       </PageContainer>
     </>
