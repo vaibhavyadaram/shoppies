@@ -8,7 +8,7 @@ import { debounce } from "lodash";
 import { Helmet } from "react-helmet";
 
 const Title = styled.p`
-  font-family: Inter-Bold;
+  font-family: Inter-Bold, Sans-Serif;
   font-size: 34px;
   color: white;
 `;
@@ -86,7 +86,7 @@ const SearchSubtitle = styled.div`
   width: 100%;
   height: 25px;
   margin: 20px 0 20px 40px;
-  font-family: Inter-SemiBold;
+  font-family: Inter-SemiBold, Sans-Serif;
   opacity: 0.5;
   @media (max-width: 800px) {
     justify-content: center;
@@ -98,7 +98,7 @@ const SearchSubtitle = styled.div`
 
 const Input = styled.input`
   -webkit-appearance: none;
-  font-family: Inter-Regular;
+  font-family: Inter-Regular, Sans-Serif;
   font-size: 14px;
   text-align: left;
   width: 90%;
@@ -114,7 +114,7 @@ const Input = styled.input`
 const Button = styled.button`
   -webkit-appearance: none;
   box-sizing: content-box;
-  font-family: Inter-Regular;
+  font-family: Inter-Regular, Sans-Serif;
   font-size: 14px;
   text-align: center;
   border: none;
@@ -173,7 +173,7 @@ const MoviePoster = styled.img`
 
 const MovieTitle = styled.p`
   width: 170px;
-  font-family: Inter-SemiBold;
+  font-family: Inter-SemiBold, Sans-Serif;
   font-size: 12px;
   text-align: center;
   align-self: center;
@@ -183,7 +183,7 @@ const Select = styled.button`
   padding: 10px 15px 10px 15px;
   background-color: #d88e00;
   color: white;
-  font-family: Inter-SemiBold;
+  font-family: Inter-SemiBold, Sans-Serif;
   font-size: 12px;
   -webkit-appearance: none;
   box-sizing: content-box;
@@ -236,7 +236,7 @@ const NomsContainer = styled.div`
 `;
 
 const Remove = styled.button`
-  font-family: Inter-Regular;
+  font-family: Inter-Regular, Sans-Serif;
   font-size: 12px;
   color: #606060;
   border: none;
@@ -257,7 +257,7 @@ const NomHeaderContainer = styled.div`
 `;
 
 const NomHeader = styled.p`
-  font-family: Inter-Bold;
+  font-family: Inter-Bold, Sans-Serif;
   font-size: 18px;
   color: #606060;
   margin: 0 0 0 20px;
@@ -272,7 +272,7 @@ const ClearAll = styled.button`
   background-color: #606060;
   color: white;
   border: none;
-  font-family: Inter-SemiBold;
+  font-family: Inter-SemiBold, Sans-Serif;
   font-size: 14px;
   transition: 0.2s;
   text-align: center;
@@ -329,13 +329,13 @@ const BannerContentContainer = styled.div`
 `;
 
 const BannerContent = styled.p`
-  font-family: Inter-SemiBold;
+  font-family: Inter-SemiBold, Sans-Serif;
   font-size: 22px;
   color: white;
 `;
 
 const Close = styled.button`
-  font-family: Inter-Regular;
+  font-family: Inter-Regular, Sans-Serif;
   font-size: 14px;
   color: white;
   background: none;
@@ -355,7 +355,7 @@ const IndexPage = () => {
   let nominationSet = new Set();
   const [nominations, setNominations] = useState(nominationSet);
 
-  const submitSearch = debounce(() => { getSearchResults() }, 200);
+  const submitSearch = debounce(() => { getSearchResults() }, 500);
 
   const getSearchResults = () => {
     const query = document.getElementById("movieTitle").value;
@@ -391,28 +391,15 @@ const IndexPage = () => {
     setNominations(updateNoms)
   };
 
-  const removeNom = (title) => {
-    if (nominations.has(title)) {
-    const updateNoms = new Set(nominations)
-    updateNoms.delete(title)
-    setNominations(updateNoms)
-    }
-  };
-
-  const clearAllHandler = () => {
-    const updateNoms = new Set()
-    setNominations(updateNoms)
-  };
-
   const validatePoster = (poster) => {
     if (poster === "N/A") {
-      return NoImage;
+      return NoImage
     } else {
-      return poster;
+      return poster
     }
   };
 
-  const validateNomination = (movie) => {
+  const isNominated = (movie) => {
     for (let nom of nominations.keys()) {
       if (nom.imdbID === movie.imdbID){
         return true;
@@ -424,7 +411,7 @@ const IndexPage = () => {
     if (emptySearch) {
       setSearchResults([]);
     }
-    if (validateNomination(movie) || nominations.size === 5) {
+    if (isNominated(movie) || nominations.size === 5) {
       return (
         <MovieCardContainer
           className="searchContent"
@@ -454,6 +441,19 @@ const IndexPage = () => {
       );
   });
 
+  const removeNom = (title) => {
+    if (nominations.has(title)) {
+      const updateNoms = new Set(nominations)
+      updateNoms.delete(title)
+      setNominations(updateNoms)
+    }
+  };
+
+  const clearAllHandler = () => {
+    const updateNoms = new Set()
+    setNominations(updateNoms)
+  };
+
   const renderNominations = (nominations) => {
     const nomsArray = [...nominations];
     return (
@@ -475,10 +475,6 @@ const IndexPage = () => {
     );
   };
 
-  const CloseBanner = () => {
-    gsap.to("#Banner", {display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5,});
-  };
-
   useEffect(() => {
     if (nominations.size > 4) {
       gsap.to("#Banner", { display: "block", marginTop: "50px", autoAlpha: 1, duration: 0.5,});
@@ -498,6 +494,11 @@ const IndexPage = () => {
       gsap.to("#Title", {color: "white", duration: 0.5, opacity: 0.7,});
     }
   }, [nominations]);
+
+  const CloseBanner = () => {
+    gsap.to("#Banner", {display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5,});
+  };
+
 
   return (
     <>
