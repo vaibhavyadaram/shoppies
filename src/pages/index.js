@@ -526,6 +526,31 @@ const IndexPage = () => {
   };
 
   useEffect(() => {
+    if (nominations.size > 4) {
+      gsap.to("#Banner", { display: "block", marginTop: "50px", autoAlpha: 1, duration: 0.5,});
+      gsap.to("#NominationPanel", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
+      gsap.to(".NominationCard", { color: "white", duration: 0.5,});
+      gsap.to("#SearchContainer", { backgroundColor: "white", border: "5px dashed #483faf", duration: 0.2, });
+      gsap.to(".searchContent", {color: "#606060", duration: 0.5, });
+      gsap.to("#movieTitle", { backgroundColor: "#F1F1F1", duration: 0.5, });
+      gsap.to("#Title", { color: "#606060", duration: 0.5, opacity: 1, });
+    } else {
+      gsap.to("#NominationPanel", { backgroundColor: "white",border: "5px dashed #483faf", duration: 0.2, });
+      gsap.to(".NominationCard", { color: "#606060", duration: 0.5, });
+      gsap.to("#SearchContainer", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
+      gsap.to(".searchContent", { color: "white", duration: 0.5, });
+      gsap.to("#movieTitle", { backgroundColor: "white", duration: 0.5, });
+      gsap.to("#Banner", { display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5, });
+      gsap.to("#Title", {color: "white", duration: 0.5, opacity: 0.7,});
+    }
+  }, [nominations]);
+
+  const CloseBanner = () => {
+    gsap.to("#Banner", {display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5,});
+  };
+
+  
+  useEffect(() => {
     const element = document.getElementById("ResultsContainer")
     if(element.clientWidth < element.scrollWidth) {
       setShowRight("1")
@@ -562,31 +587,6 @@ const IndexPage = () => {
     const scrollPosition = element.scrollLeft
     element.scrollLeft = scrollPosition + 200
   }
-
-  useEffect(() => {
-    if (nominations.size > 4) {
-      gsap.to("#Banner", { display: "block", marginTop: "50px", autoAlpha: 1, duration: 0.5,});
-      gsap.to("#NominationPanel", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
-      gsap.to(".NominationCard", { color: "white", duration: 0.5,});
-      gsap.to("#SearchContainer", { backgroundColor: "white", border: "5px dashed #483faf", duration: 0.2, });
-      gsap.to(".searchContent", {color: "#606060", duration: 0.5, });
-      gsap.to("#movieTitle", { backgroundColor: "#F1F1F1", duration: 0.5, });
-      gsap.to("#Title", { color: "#606060", duration: 0.5, opacity: 1, });
-    } else {
-      gsap.to("#NominationPanel", { backgroundColor: "white",border: "5px dashed #483faf", duration: 0.2, });
-      gsap.to(".NominationCard", { color: "#606060", duration: 0.5, });
-      gsap.to("#SearchContainer", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
-      gsap.to(".searchContent", { color: "white", duration: 0.5, });
-      gsap.to("#movieTitle", { backgroundColor: "white", duration: 0.5, });
-      gsap.to("#Banner", { display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5, });
-      gsap.to("#Title", {color: "white", duration: 0.5, opacity: 0.7,});
-    }
-  }, [nominations]);
-
-  const CloseBanner = () => {
-    gsap.to("#Banner", {display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5,});
-  };
-
 
   return (
     <>
