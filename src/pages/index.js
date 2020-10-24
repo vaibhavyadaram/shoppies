@@ -552,6 +552,7 @@ const IndexPage = () => {
   
   useEffect(() => {
     const element = document.getElementById("ResultsContainer")
+    element.scrollLeft = 0
     if(element.clientWidth < element.scrollWidth) {
       setShowRight("1")
     }
