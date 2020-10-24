@@ -3,6 +3,8 @@ import styled from "styled-components";
 import NoImage from "../images/noimage.png";
 import fav16 from "../images/favicon16.png";
 import fav32 from "../images/favicon32.png";
+import left from "../images/leftarrow.png";
+import right from "../images/rightarrow.png";
 import { gsap } from "gsap";
 import { debounce } from "lodash";
 import { Helmet } from "react-helmet";
@@ -138,7 +140,37 @@ const Button = styled.button`
   }
 `;
 
+const LeftArrowContainer= styled.div`
+  height: 100%
+  width: 50px;
+  z-index: 100;
+  display: flex;
+  position: sticky;
+  top: 0;
+  left: 20px;
+  opacity: ${(props) => `${props.opacity}`};
+`
+const RightArrowContainer = styled.div`
+  height: 100%
+  width: 50px;
+  z-index: 100;
+  display: flex;
+  position: sticky;
+  top: 0;
+  right: 20px;
+  opacity: ${(props) => `${props.opacity}`};
+`
+
+const Arrow = styled.img`
+width: 50px;
+height: 50px
+justify-self: center;
+align-self: center;
+margin-bottom: 50px;
+`
+
 const ResultsContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   height: 100%;
@@ -354,6 +386,8 @@ const IndexPage = () => {
   const [emptySearch, setEmptySearch] = useState();
   let nominationSet = new Set();
   const [nominations, setNominations] = useState(nominationSet);
+  const [showRight, setShowRight] = useState("0");
+  const [showLeft, setShowLeft] = useState("0");
 
   const submitSearch = debounce(() => { getSearchResults() }, 500);
 
@@ -476,6 +510,33 @@ const IndexPage = () => {
   };
 
   useEffect(() => {
+    const element = document.getElementById("ResultsContainer")
+    if(element.clientWidth < element.scrollWidth) {
+      setShowRight("1")
+    }
+    else {
+      setShowRight("0")
+      setShowLeft("0")
+    }
+  }, [searchResults])
+
+  const scrollHandler = () => {
+    const element = document.getElementById("ResultsContainer")
+    const scrollPosition = (element.scrollLeft) / (element.scrollWidth - element.clientWidth) * 100
+    console.log(scrollPosition)
+    if(scrollPosition > 5) {
+      setShowRight("1")
+      setShowLeft("1")
+    }
+    if(scrollPosition > 95) {
+      setShowRight("0")
+    }
+    if(scrollPosition < 5) {
+      setShowLeft("0")
+    }
+  }
+
+  useEffect(() => {
     if (nominations.size > 4) {
       gsap.to("#Banner", { display: "block", marginTop: "50px", autoAlpha: 1, duration: 0.5,});
       gsap.to("#NominationPanel", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
@@ -554,7 +615,15 @@ const IndexPage = () => {
           <SearchSubtitle className="searchContent">
             {searchTerm}{" "}
           </SearchSubtitle>
-          <ResultsContainer id="ResultsContainer">{renderResults}</ResultsContainer>
+          <ResultsContainer onLoad={scrollHandler} onScroll={scrollHandler} id="ResultsContainer">
+            <LeftArrowContainer opacity={showLeft}>            
+              <Arrow src={left}/>
+            </LeftArrowContainer>
+            {renderResults}
+            <RightArrowContainer opacity={showRight}>
+              <Arrow src={right}/>
+            </RightArrowContainer>
+          </ResultsContainer>
         </SearchContainer>
         <NominationPanel id="NominationPanel">
           <NomHeaderContainer>
@@ -567,5 +636,4 @@ const IndexPage = () => {
     </>
   );
 };
-
 export default IndexPage;
