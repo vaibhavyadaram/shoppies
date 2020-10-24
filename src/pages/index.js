@@ -3,8 +3,8 @@ import styled from "styled-components";
 import NoImage from "../images/noimage.png";
 import fav16 from "../images/favicon16.png";
 import fav32 from "../images/favicon32.png";
-import left from "../images/leftarrow.png";
-import right from "../images/rightarrow.png";
+import left from "../images/left.png";
+import right from "../images/right.png";
 import { gsap } from "gsap";
 import { debounce } from "lodash";
 import { Helmet } from "react-helmet";
@@ -149,6 +149,10 @@ const LeftArrowContainer= styled.div`
   top: 0;
   left: 20px;
   opacity: ${(props) => `${props.opacity}`};
+  @media (max-width: 800px) {
+    width: 30px;
+    left: 10px;
+  }
 `
 const RightArrowContainer = styled.div`
   height: 100%
@@ -159,6 +163,11 @@ const RightArrowContainer = styled.div`
   top: 0;
   right: 20px;
   opacity: ${(props) => `${props.opacity}`};
+  @media (max-width: 800px) {
+    width: 30px;
+    right: 10px;
+  }
+
 `
 
 const Arrow = styled.img`
@@ -167,6 +176,12 @@ height: 50px
 justify-self: center;
 align-self: center;
 margin-bottom: 50px;
+transition: .2s;
+&:hover{
+  opacity: .5;
+  cursor: pointer;
+  transition: .2s;
+}
 `
 
 const ResultsContainer = styled.div`
@@ -177,6 +192,7 @@ const ResultsContainer = styled.div`
   overflow-x: scroll;
   overflow-y: hidden;
   padding: 0 40px 0 40px;
+  scroll-behavior: smooth;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -523,7 +539,6 @@ const IndexPage = () => {
   const scrollHandler = () => {
     const element = document.getElementById("ResultsContainer")
     const scrollPosition = (element.scrollLeft) / (element.scrollWidth - element.clientWidth) * 100
-    console.log(scrollPosition)
     if(scrollPosition > 5) {
       setShowRight("1")
       setShowLeft("1")
@@ -534,6 +549,18 @@ const IndexPage = () => {
     if(scrollPosition < 5) {
       setShowLeft("0")
     }
+  }
+
+  const scrollLeft = () => {
+    const element = document.getElementById("ResultsContainer")
+    const scrollPosition = element.scrollLeft
+    element.scrollLeft = scrollPosition - 200
+  }
+
+  const scrollRight = () => {
+    const element = document.getElementById("ResultsContainer")
+    const scrollPosition = element.scrollLeft
+    element.scrollLeft = scrollPosition + 200
   }
 
   useEffect(() => {
@@ -617,11 +644,11 @@ const IndexPage = () => {
           </SearchSubtitle>
           <ResultsContainer onLoad={scrollHandler} onScroll={scrollHandler} id="ResultsContainer">
             <LeftArrowContainer opacity={showLeft}>            
-              <Arrow src={left}/>
+              <Arrow onClick={scrollLeft} src={left}/>
             </LeftArrowContainer>
             {renderResults}
             <RightArrowContainer opacity={showRight}>
-              <Arrow src={right}/>
+              <Arrow onClick={scrollRight} src={right}/>
             </RightArrowContainer>
           </ResultsContainer>
         </SearchContainer>
