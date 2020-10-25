@@ -225,6 +225,7 @@ const MovieTitle = styled.p`
   font-size: 12px;
   text-align: center;
   align-self: center;
+  color: ${(props) => `${props.color}`};
 `;
 
 const Select = styled.button`
@@ -395,8 +396,7 @@ const Close = styled.button`
 `;
 
 const IndexPage = () => {
-  const url =
-    "https://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s=";
+  const url = "https://www.omdbapi.com/?i=tt3896198&apikey=e4f7e31a&type=movie&s=";
   const [searchResults, setSearchResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState( "Search for your favourite movies to nominate!");
   const [emptySearch, setEmptySearch] = useState();
@@ -469,7 +469,7 @@ const IndexPage = () => {
           key={movie.imdbID}
         >
           <MoviePoster alt={movie.Title} src={validatePoster(movie.Poster)} />
-          <MovieTitle>
+          <MovieTitle color={nominations.size === 5 ? "grey" : "white"}>
             {movie.Title} ({movie.Year})
           </MovieTitle>
           <Select disabled="disabled">Nominate</Select>
