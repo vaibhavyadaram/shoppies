@@ -170,7 +170,7 @@ const RightArrowContainer = styled.div`
 
 `
 
-const Arrow = styled.img`
+const Arrow = styled.input`
 width: 50px;
 height: 50px
 justify-self: center;
@@ -404,6 +404,7 @@ const IndexPage = () => {
   const [nominations, setNominations] = useState(nominationSet);
   const [showRight, setShowRight] = useState("0");
   const [showLeft, setShowLeft] = useState("0");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const submitSearch = debounce(() => { getSearchResults() }, 500);
 
@@ -517,7 +518,7 @@ const IndexPage = () => {
             <MovieTitle>
               {movie.Title} ({movie.Year})
             </MovieTitle>
-            <Remove className="NominationCard" onClick={() => removeNom(movie)}>
+            <Remove disabled={isModalOpen ? "disabled" : ""}className="NominationCard" onClick={() => removeNom(movie)}>
               Remove
             </Remove>
           </MovieCardContainer>
@@ -527,6 +528,7 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (nominations.size > 4) {
+      setIsModalOpen(!isModalOpen);
       gsap.to("#Banner", { display: "block", marginTop: "50px", autoAlpha: 1, duration: 0.5,});
       gsap.to("#NominationPanel", { backgroundColor: "#483faf", border: "none", duration: 0.2, });
       gsap.to(".NominationCard", { color: "white", duration: 0.5,});
@@ -546,6 +548,7 @@ const IndexPage = () => {
   }, [nominations]);
 
   const CloseBanner = () => {
+    setIsModalOpen(!isModalOpen);
     gsap.to("#Banner", {display: "none", marginTop: "0px", autoAlpha: 0, duration: 0.5,});
   };
 
@@ -633,8 +636,9 @@ const IndexPage = () => {
                 id="movieTitle"
                 placeholder="Search for a movie"
                 onKeyDown={submitSearch}
+                disabled={isModalOpen ? "disabled" : ""}
               />
-              <Button onClick={getSearchResults}>Search</Button>
+              <Button disabled={isModalOpen ? "disabled" : ""} onClick={getSearchResults}>Search</Button>
             </SearchBar>
             <TitleContainer>
               <Title id="Title">The Shoppies</Title>
@@ -645,18 +649,18 @@ const IndexPage = () => {
           </SearchSubtitle>
           <ResultsContainer onLoad={scrollHandler} onScroll={scrollHandler} id="ResultsContainer">
             <LeftArrowContainer opacity={showLeft}>            
-              <Arrow onClick={scrollLeft} src={left}/>
+              <Arrow disabled={isModalOpen ? "disabled" : ""}  type="image" onClick={scrollLeft} src={left}/>
             </LeftArrowContainer>
             {renderResults}
             <RightArrowContainer opacity={showRight}>
-              <Arrow onClick={scrollRight} src={right}/>
+              <Arrow disabled={isModalOpen ? "disabled" : ""} type="image" onClick={scrollRight} src={right}/>
             </RightArrowContainer>
           </ResultsContainer>
         </SearchContainer>
         <NominationPanel id="NominationPanel">
           <NomHeaderContainer>
             <NomHeader className="NominationCard">Your Nominations</NomHeader>
-            <ClearAll onClick={clearAllHandler}>Clear All</ClearAll>
+            <ClearAll disabled={isModalOpen ? "disabled" : ""} onClick={clearAllHandler}>Clear All</ClearAll>
           </NomHeaderContainer>
           <NomsContainer>{renderNominations(nominations)}</NomsContainer>
         </NominationPanel>
