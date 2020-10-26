@@ -318,7 +318,8 @@ const NomHeader = styled.p`
 const ClearAll = styled.button`
   width: 80%;
   margin: 20px 0 0 20px;
-  background-color: #606060;
+  background-color:#af2d2d;
+  
   color: white;
   border: none;
   font-family: Inter-SemiBold, Sans-Serif;
@@ -328,6 +329,7 @@ const ClearAll = styled.button`
   text-decoration: none;
   padding: 10px 0 10px 0;
   border-radius: 3px;
+  
   &:hover {
     opacity: 0.5;
     transition: 0.2s;
@@ -336,6 +338,10 @@ const ClearAll = styled.button`
   @media (max-width: 800px) {
     width: 40%;
     margin: 20px 0 0 0;
+  }
+
+  &:disabled{
+    background-color: #606060;
   }
 `;
 
@@ -526,6 +532,7 @@ const IndexPage = () => {
     );
   };
 
+//Switch panel colors when nominations reach capacity
   useEffect(() => {
     if (nominations.size > 4) {
       setIsModalOpen(!isModalOpen);
