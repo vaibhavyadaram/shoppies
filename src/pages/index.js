@@ -656,11 +656,11 @@ const IndexPage = () => {
           </SearchSubtitle>
           <ResultsContainer onLoad={scrollHandler} onScroll={scrollHandler} id="ResultsContainer">
             <LeftArrowContainer opacity={showLeft}>            
-              <Arrow disabled={isModalOpen ? "disabled" : ""}  type="image" onClick={scrollLeft} src={left}/>
+              <Arrow aria-label="Scroll Left" disabled={isModalOpen ? "disabled" : ""}  type="image" onClick={scrollLeft} src={left}/>
             </LeftArrowContainer>
             {renderResults}
             <RightArrowContainer opacity={showRight}>
-              <Arrow disabled={isModalOpen ? "disabled" : ""} type="image" onClick={scrollRight} src={right}/>
+              <Arrow aria-label="Scroll Right" disabled={isModalOpen ? "disabled" : ""} type="image" onClick={scrollRight} src={right}/>
             </RightArrowContainer>
           </ResultsContainer>
         </SearchContainer>
