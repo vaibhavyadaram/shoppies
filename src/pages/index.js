@@ -21,7 +21,7 @@ const TitleContainer = styled.div`
   justify-self: center;
   align-self: center;
   margin: 20px 40px 0 0;
-  opacity: 0.7;
+  opacity: 1;
   @media (max-width: 800px) {
     display: none;
   }
@@ -89,7 +89,7 @@ const SearchSubtitle = styled.div`
   height: 25px;
   margin: 20px 0 20px 40px;
   font-family: Inter-SemiBold, Sans-Serif;
-  opacity: 0.5;
+  opacity: 1;
   @media (max-width: 800px) {
     justify-content: center;
     margin: 20px 0 0 0;
